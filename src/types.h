@@ -47,8 +47,18 @@ enum {
   ALL_CASTLES = 15,
 };
 
-typedef uint16_t Move;
+typedef int8_t MoveType;
+enum {
+  MOVE_NORMAL,
+  MOVE_PROMO_N,
+  MOVE_PROMO_B,
+  MOVE_PROMO_R,
+  MOVE_PROMO_Q,
+  MOVE_CASTLE,
+  MOVE_EP,
+};
 
+typedef uint16_t Move;
 static inline Square move_src(Move move) {
   return move & 0x3F;
 }
@@ -57,6 +67,6 @@ static inline Square move_dst(Move move) {
   return (move>>6) & 0x3F;
 }
 
-static inline Piece move_promo(Move move) {
+static inline MoveType move_type(Move move) {
   return move >> 12;
 }

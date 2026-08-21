@@ -51,9 +51,9 @@ void format_move(Move move, char *buffer) {
   format_square(move_src(move), buffer);
   format_square(move_dst(move), buffer+2);
 
-  Piece promo = move_promo(move);
-  if (promo >= KNIGHT && promo <= QUEEN) {
-    buffer[4] = format_piece(promo);
+  MoveType type = move_type(move);
+  if (type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q) {
+    buffer[4] = format_piece(type);
   }
 }
 
