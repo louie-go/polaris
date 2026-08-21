@@ -8,3 +8,4 @@ A chess engine written in C.
 - [ ] Implement move generation.
 - [ ] Implement evaluation via NNUE.
 - [ ] Add fallthroughs for functions with intrinsics.
+- [ ] Implement Zobrist hashing.

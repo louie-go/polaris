@@ -9,7 +9,7 @@ typedef struct {
   Move         history[1024];
   Bitboard     bitboards[N_COLORS][N_PIECES];
   Bitboard     occupancies[N_COLORS+1];
-  uint64_t     hash;
+  uint64_t     hash; // TODO: implement zobrist hashing
   uint16_t     fullmove_no;
   uint8_t      halfmove_clk;
   Color        turn;
