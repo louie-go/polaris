@@ -49,11 +49,11 @@ void format_rights(CastleRights rights, char *buffer) {
 
 void format_move(Move move, char *buffer) {
   format_square(move_src(move), buffer);
-  format_square(move_dst(move), buffer += 2);
+  format_square(move_dst(move), buffer+2);
 
   Piece promo = move_promo(move);
   if (promo >= KNIGHT && promo <= QUEEN) {
-    buffer[1] = format_piece(promo);
+    buffer[4] = format_piece(promo);
   }
 }
 
