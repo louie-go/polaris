@@ -53,6 +53,7 @@ void format_move(Move move, char *buffer) {
 
   MoveType type = move_type(move);
   if (type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q) {
+    // `Piece` and `MoveType` overlap (check `types.h`)
     buffer[4] = format_piece(type);
   }
 }
