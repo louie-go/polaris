@@ -65,12 +65,12 @@ void format_fen(const Board *board, char *buffer) {
   for (Rank rank = RANK_8; rank > NO_RANK; rank--) {
     for (File file = FILE_A; file < N_FILES; file++) {
       Square square = (rank<<3) + file;
-      Bitboard bb_square = 1ULL<<square;
       Piece piece = board->pieces[square];
 
       if (piece != NO_PIECE) {
         char piece_char = format_piece(piece);
-        *buffer++ = bb_square & board->occupancies[WHITE] ?
+        // uppercase if white, lowercase if black
+        *buffer++ = 1ULL<<square & board->occupancies[WHITE] ?
           piece_char&-33 : piece_char;
       } else
         if (buffer[-1] >= '1' && buffer[-1] <= '8') buffer[-1]++;
