@@ -62,22 +62,19 @@ void format_fen(const Board *board, char *buffer) {
   /************************
    *        BOARD         *
    ************************/
-  for (Rank rank = RANK_8; rank >= RANK_1; rank--) {
+  for (Rank rank = RANK_8; rank > NO_RANK; rank--) {
     for (File file = FILE_A; file < N_FILES; file++) {
-      Bitboard bb_square = 1ULL<<(rank*8 + file);
-      for (Color color = WHITE; color < N_COLORS; color++)
-        for (Piece piece = PAWN; piece < N_PIECES; piece++)
-          if (bb_square & board->bitboards[color][piece]) {
-            char piece_char = format_piece(piece);
-            *buffer++ = color==WHITE ? piece_char&-33 : piece_char;
-            goto next_square;
-          }
+      Square square = (rank<<3) + file;
+      Bitboard bb_square = 1ULL<<square;
+      Piece piece = board->pieces[square];
 
-      if (buffer[-1] >= '1' && buffer[-1] <= '8') buffer[-1]++;
-      else *buffer++ = '1';
-
-next_square:
-      ;
+      if (piece != NO_PIECE) {
+        char piece_char = format_piece(piece);
+        *buffer++ = bb_square & board->occupancies[WHITE] ?
+          piece_char&-33 : piece_char;
+      } else
+        if (buffer[-1] >= '1' && buffer[-1] <= '8') buffer[-1]++;
+        else *buffer++ = '1';
     }
 
     if (rank != RANK_1) *buffer++ = '/';
