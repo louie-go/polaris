@@ -92,7 +92,6 @@ char *format_fen(const Board *board, char *buffer) {
   /************************
    *   EN PASSANT SQUARE  *
    ************************/
-  // while (*buffer != '\0') buffer++;
   *buffer++ = ' ';
   buffer = format_square(board->ep_square, buffer);
 
