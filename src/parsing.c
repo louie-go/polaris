@@ -59,17 +59,15 @@ void parse_fen(const char *fen, Board *board) {
     for (Piece piece = PAWN; piece < N_PIECES; piece++)
       board->bitboards[color][piece] = 0;
   }
-  for (Square square = A1; square < N_SQUARES; square++)
-    board->pieces[square] = NO_PIECE;
   File file = FILE_A; Rank rank = RANK_8;
   for (; *fen != ' '; fen++, file++) {
+    Square square = (rank<<3) + file;
     if ((*fen|32) == 'p' ||
         (*fen|32) == 'n' ||
         (*fen|32) == 'b' ||
         (*fen|32) == 'r' ||
         (*fen|32) == 'q' ||
         (*fen|32) == 'k') {
-      Square square = (rank<<3) + file;
       Bitboard bb_square = 1ULL<<square;
       Color color = *fen&32 ? BLACK : WHITE;
       Piece piece = parse_piece(*fen | 32);
@@ -78,9 +76,11 @@ void parse_fen(const char *fen, Board *board) {
       board->occupancies[color] |= bb_square;
       board->occupancies[ALL] |= bb_square;
       board->pieces[square] = piece;
-    } else if (*fen >= '1' && *fen <= '8')
+    } else if (*fen >= '1' && *fen <= '8') {
+      for (Square empty = square; empty < square + (*fen-'0'); empty++)
+        board->pieces[empty] = NO_PIECE;
       file += *fen-'1';
-    else if (*fen == '/') {
+    } else if (*fen == '/') {
       file = FILE_A-1; rank--;
     } else assert(0);
   }
