@@ -44,7 +44,7 @@ Move parse_move(const char *move_str) {
   if (promo_char == '\0')
     return src | dst<<6;
 
-  // `Piece` and `MoveType` overlapk (check `types.h`)
+  // `Piece` and `MoveType` overlap (check `types.h`)
   MoveType type = parse_piece(promo_char);
   return src | dst<<6 | type<<12;
 }
