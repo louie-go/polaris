@@ -84,6 +84,8 @@ void parse_fen(const char *fen, Board *board) {
       file = FILE_A-1; rank--;
     } else assert(0);
   }
+  assert(file == FILE_H+1);
+  assert(rank == RANK_1);
 
   /************************
    *        TURN          *
