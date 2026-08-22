@@ -6,12 +6,6 @@
 typedef int8_t Color;
 enum { NO_COLOR = -1, WHITE, BLACK, ALL, N_COLORS = 2 };
 
-static inline Color opposite(Color color) {
-  assert(color > NO_COLOR && color < N_COLORS);
-
-  return color == WHITE ? BLACK : WHITE;
-}
-
 typedef int8_t Piece;
 enum { NO_PIECE = -1, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, N_PIECES };
 
@@ -54,7 +48,10 @@ enum {
   MOVE_PROMO_B,
   MOVE_PROMO_R,
   MOVE_PROMO_Q,
-  MOVE_CASTLE,
+  MOVE_CASTLE_WK,
+  MOVE_CASTLE_WQ,
+  MOVE_CASTLE_BK,
+  MOVE_CASTLE_BQ,
   MOVE_EP,
 };
 
