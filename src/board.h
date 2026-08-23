@@ -6,11 +6,12 @@
 #include "bitboard.h"
 
 typedef struct {
-  Move         history[1024];
-  Bitboard     bitboards[N_COLORS][N_PIECES];
+  // TODO: implement PGN formatting
+  // Move         history[1024];
+  Bitboard     bitboards[COLOR_LEN][PIECETYPE_LEN];
   Piece        pieces[64];
   // +1 for `ALL` (check `types.h`)
-  Bitboard     occupancies[N_COLORS+1];
+  Bitboard     occupancies[COLOR_LEN+1];
   // TODO: implement zobrist hashing
   // uint64_t     hash;
   uint16_t     fullmove_no;
@@ -21,5 +22,6 @@ typedef struct {
 } Board;
 
 void make_move(Board *, Move);
-void undo_move(Board *);
+// TODO: implement states
+// void undo_move(Board *);
 void print_board(const Board *, FILE *);

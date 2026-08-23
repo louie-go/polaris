@@ -11,8 +11,8 @@ static inline Color parse_color(char color_char) {
   return color_char == 'w' ? WHITE : BLACK;
 }
 
-static inline Piece parse_piece(char piece_char) {
-  switch (piece_char) {
+static inline PieceType parse_piecetype(char piecetype_char) {
+  switch (piecetype_char) {
     case 'p': return PAWN;
     case 'n': return KNIGHT;
     case 'b': return BISHOP;
@@ -21,7 +21,27 @@ static inline Piece parse_piece(char piece_char) {
     case 'k': return KING;
     default:
       assert(0);
-      return NO_PIECE;
+      return PIECETYPE_NONE;
+  }
+}
+
+static inline Piece parse_piece(char piece_char) {
+  switch (piece_char) {
+    case 'P': return WHITE_PAWN;
+    case 'N': return WHITE_KNIGHT;
+    case 'B': return WHITE_BISHOP;
+    case 'R': return WHITE_ROOK;
+    case 'Q': return WHITE_QUEEN;
+    case 'K': return WHITE_KING;
+    case 'p': return BLACK_PAWN;
+    case 'n': return BLACK_KNIGHT;
+    case 'b': return BLACK_BISHOP;
+    case 'r': return BLACK_ROOK;
+    case 'q': return BLACK_QUEEN;
+    case 'k': return BLACK_KING;
+    default:
+      assert(0);
+      return PIECE_NONE;
   }
 }
 

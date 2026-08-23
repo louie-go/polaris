@@ -7,17 +7,13 @@
 #include "types.h"
 
 void print_bitboard(Bitboard bitboard, FILE *stream) {
-  for (Rank rank = RANK_8; rank > NO_RANK; rank--) {
+  for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
     fputc(format_rank(rank), stream);
     fputc(' ', stream);
-    for (File file = FILE_A; file < N_FILES; file++) {
+    for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
       Bitboard bb_square = 1ULL<<(rank*8 + file);
-
-      if (bb_square & bitboard) {
-        fputc('*', stream);
-      } else {
-        fputc('.', stream);
-      }
+      if (bb_square & bitboard) fputc('*', stream);
+      else fputc('.', stream);
       fputc(' ', stream);
     }
 
@@ -28,7 +24,7 @@ void print_bitboard(Bitboard bitboard, FILE *stream) {
 
 #ifndef NDEBUG
   char lsb_str[3];
-  format_square(lsb(bitboard), lsb_str);
+  format_square(bitboard!=0 ? lsb(bitboard) : SQUARE_NONE, lsb_str);
 
   fprintf(stream, "\nvalue 0x%" PRIX64 " count %" PRIu8 " lsb %s\n",
       bitboard, popcount(bitboard), lsb_str);

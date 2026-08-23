@@ -7,13 +7,13 @@
 #include "types.h"
 
 Square parse_square(const char *square_str) {
-  if (*square_str == '-') return NO_SQUARE;
+  if (*square_str == '-') return SQUARE_NONE;
 
   return (parse_rank(square_str[1])<<3) + parse_file(*square_str);
 }
 
 CastleRights parse_rights(const char *rights_str) {
-  if (*rights_str == '-') return NO_CASTLES;
+  if (*rights_str == '-') return CASTLE_NONE;
 
   CastleRights rights = 0;
 
@@ -45,47 +45,46 @@ Move parse_move(const char *move_str) {
     return src | dst<<6;
 
   // `Piece` and `MoveType` overlap (check `types.h`)
-  MoveType type = parse_piece(promo_char);
+  MoveType type = parse_piecetype(promo_char);
   return src | dst<<6 | type<<12;
 }
+
+#include "formatting.h"
 
 void parse_fen(const char *fen, Board *board) {
   /************************
    *        BOARD         *
    ************************/
   board->occupancies[ALL] = 0;
-  for (Color color = WHITE; color < N_COLORS; color++) {
+  for (Color color = COLOR_NONE+1; color < COLOR_LEN; color++) {
     board->occupancies[color] = 0;
-    for (Piece piece = PAWN; piece < N_PIECES; piece++)
-      board->bitboards[color][piece] = 0;
+    for (PieceType type = PIECETYPE_NONE+1; type < PIECETYPE_LEN; type++)
+      board->bitboards[color][type] = 0;
   }
-  File file = FILE_A; Rank rank = RANK_8;
+  File file = FILE_NONE+1; Rank rank = RANK_LEN-1;
   for (; *fen != ' '; fen++, file++) {
     Square square = (rank<<3) + file;
-    if ((*fen|32) == 'p' ||
-        (*fen|32) == 'n' ||
-        (*fen|32) == 'b' ||
-        (*fen|32) == 'r' ||
-        (*fen|32) == 'q' ||
-        (*fen|32) == 'k') {
-      Bitboard bb_square = 1ULL<<square;
-      Color color = *fen&32 ? BLACK : WHITE;
-      Piece piece = parse_piece(*fen | 32);
 
-      board->bitboards[color][piece] |= bb_square;
+    if (*fen == 'P' || *fen == 'N' || *fen == 'B' || *fen == 'R' || *fen == 'Q' || *fen == 'K' ||
+        *fen == 'p' || *fen == 'n' || *fen == 'b' || *fen == 'r' || *fen == 'q' || *fen == 'k') { 
+      Piece piece = parse_piece(*fen);
+      Color color = piece_color(piece);
+      Bitboard bb_square = 1ULL<<square;
+
+      board->bitboards[color][piece_type(piece)] |= bb_square;
       board->occupancies[color] |= bb_square;
       board->occupancies[ALL] |= bb_square;
       board->pieces[square] = piece;
     } else if (*fen >= '1' && *fen <= '8') {
-      for (Square empty = square; empty < square + (*fen-'0'); empty++)
-        board->pieces[empty] = NO_PIECE;
+      for (Square empty = square; empty < square+(*fen-'0'); empty++)
+        board->pieces[empty] = PIECE_NONE;
       file += *fen-'1';
     } else if (*fen == '/') {
-      file = FILE_A-1; rank--;
+      file = FILE_NONE; rank--;
     } else assert(0);
   }
-  assert(file == FILE_H+1);
-  assert(rank == RANK_1);
+  assert(file == FILE_LEN);
+  assert(rank == RANK_NONE+1);
 
   /************************
    *        TURN          *

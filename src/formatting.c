@@ -7,13 +7,13 @@
 #include "types.h"
 
 char *format_square(Square square, char *buffer) {
-  if (square == NO_SQUARE) {
+  if (square == SQUARE_NONE) {
     *buffer++ = '-';
     *buffer = '\0';
     return buffer;
   }
 
-  assert(square > NO_SQUARE && square < N_SQUARES);
+  assert(square > SQUARE_NONE && square < SQUARE_LEN);
 
   *buffer++ = format_file(square%8);
   *buffer++ = format_rank(square/8);
@@ -23,15 +23,15 @@ char *format_square(Square square, char *buffer) {
 }
 
 char *format_rights(CastleRights rights, char *buffer) {
-  assert(rights <= ALL_CASTLES);
+  assert(rights <= CASTLE_ALL);
 
-  if (rights == NO_CASTLES) {
+  if (rights == CASTLE_NONE) {
     *buffer++ = '-';
     *buffer = '\0';
     return buffer;
   }
 
-  for (CastleRights right = CASTLE_WK; right <= (1 << (N_CASTLES-1)); right <<= 1)
+  for (CastleRights right = CASTLE_WK; right <= (1<<(CASTLE_LEN-1)); right <<= 1)
     switch (right&rights) {
       case CASTLE_WK: *buffer++ = 'K'; break;
       case CASTLE_WQ: *buffer++ = 'Q'; break;
@@ -50,7 +50,7 @@ char *format_move(Move move, char *buffer) {
   MoveType type = move_type(move);
   if (type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q)
     // `Piece` and `MoveType` overlap (check `types.h`)
-    *buffer++ = format_piece(type);
+    *buffer++ = format_piecetype(type);
 
   return buffer;
 }
@@ -59,17 +59,13 @@ char *format_fen(const Board *board, char *buffer) {
   /************************
    *        BOARD         *
    ************************/
-  for (Rank rank = RANK_8; rank > NO_RANK; rank--) {
-    for (File file = FILE_A; file < N_FILES; file++) {
+  for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
+    for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
       Square square = (rank<<3) + file;
       Piece piece = board->pieces[square];
 
-      if (piece != NO_PIECE) {
-        char piece_char = format_piece(piece);
-        // uppercase if white, lowercase if black
-        *buffer++ = 1ULL<<square & board->occupancies[WHITE] ?
-          piece_char&-33 : piece_char;
-      } else
+      if (piece != PIECE_NONE) *buffer++ = format_piece(piece);
+      else
         if (buffer[-1] >= '1' && buffer[-1] <= '8') buffer[-1]++;
         else *buffer++ = '1';
     }

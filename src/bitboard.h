@@ -19,7 +19,7 @@ static inline Bitboard bitboard_file(File file) {
 }
 
 static inline Bitboard bitboard_rank(Rank rank) {
-  return 0xFFULL << rank*N_RANKS;
+  return 0xFFULL << rank*RANK_LEN;
 }
 
 static inline uint8_t popcount(Bitboard bitboard) {

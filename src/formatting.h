@@ -6,15 +6,15 @@
 #include "types.h"
 
 static inline char format_color(Color color) {
-  assert(color > NO_COLOR && color < N_COLORS);
+  assert(color > COLOR_NONE && color < COLOR_LEN);
 
   return color == WHITE ? 'w' : 'b';
 }
 
-static inline char format_piece(Piece piece) {
-  assert(piece > NO_PIECE && piece < N_PIECES);
+static inline char format_piecetype(PieceType piecetype) {
+  assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
 
-  switch (piece) {
+  switch (piecetype) {
     case PAWN: return 'p';
     case KNIGHT: return 'n';
     case BISHOP: return 'b';
@@ -26,14 +26,35 @@ static inline char format_piece(Piece piece) {
   return 0;
 }
 
+static inline char format_piece(Piece piece) {
+  assert(piece > PIECE_NONE && piece < PIECE_LEN);
+
+  switch (piece) {
+    case WHITE_PAWN: return 'P';
+    case WHITE_KNIGHT: return 'N';
+    case WHITE_BISHOP: return 'B';
+    case WHITE_ROOK: return 'R';
+    case WHITE_QUEEN: return 'Q';
+    case WHITE_KING: return 'K';
+    case BLACK_PAWN: return 'p';
+    case BLACK_KNIGHT: return 'n';
+    case BLACK_BISHOP: return 'b';
+    case BLACK_ROOK: return 'r';
+    case BLACK_QUEEN: return 'q';
+    case BLACK_KING: return 'k';
+  }
+
+  return 0;
+}
+
 static inline char format_file(File file) {
-  assert(file > NO_FILE && file < N_FILES);
+  assert(file > FILE_NONE && file < FILE_LEN);
 
   return file + 'a';
 }
 
 static inline char format_rank(Rank rank) {
-  assert(rank > NO_RANK && rank < N_RANKS);
+  assert(rank > RANK_NONE && rank < RANK_LEN);
 
   return rank + '1';
 }
