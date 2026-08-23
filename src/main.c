@@ -13,5 +13,6 @@ int main(void) {
   parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
   print_board(board, stdout);
 
+  free(board);
   return 0;
 }
