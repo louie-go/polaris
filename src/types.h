@@ -6,6 +6,9 @@
 typedef int8_t Color;
 enum { COLOR_NONE = -1, WHITE, BLACK, ALL, COLOR_LEN = 2 };
 
+static inline Color opposite(Color color) {
+  return color ^ 1;
+}
 
 typedef int8_t PieceType;
 enum { PIECETYPE_NONE = -1, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, PIECETYPE_LEN };
@@ -16,7 +19,7 @@ enum { PIECE_NONE = -1,
   BLACK_PAWN = PAWN+8, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING,
   PIECE_LEN };
 
-static inline Piece make_piece(Color color, PieceType piecetype) {
+static inline Piece new_piece(Color color, PieceType piecetype) {
   return (color<<3) | piecetype;
 }
 
@@ -47,6 +50,18 @@ enum {
   A8, B8, C8, D8, E8, F8, G8, H8,
   SQUARE_LEN,
 };
+
+static inline Square new_square(File file, Rank rank) {
+  return (rank<<3) + file;
+}
+
+static inline File square_file(Square square) {
+  return square % 8;
+}
+
+static inline Rank square_rank(Square square) {
+  return square / 8;
+}
 
 typedef uint8_t CastleRights;
 enum {
@@ -82,6 +97,10 @@ enum {
 };
 
 typedef uint16_t Move;
+static inline Move new_move(Square src, Square dst, MoveType type) {
+  return src | dst<<6 | type<<12;
+}
+
 static inline Square move_src(Move move) {
   return move & 0x3F;
 }
