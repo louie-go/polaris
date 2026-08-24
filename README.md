@@ -10,4 +10,4 @@ A chess engine written in C.
 - [ ] Add fallback for functions with intrinsics.
 - [x] Implement Zobrist hashing.
 - [ ] Implement PGN formatting.
-- [ ] Implement states for `undo_move`.
+- [x] Implement states for `undo_move`.

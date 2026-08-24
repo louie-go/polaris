@@ -2,13 +2,10 @@
 
 #include <assert.h>
 #include <stdint.h>
-#include <stdio.h>
 
-#if !defined(__POPCNT__) || !defined(__BMI__)
-#error "requires POPCNT and BMI"
-#endif
-
+#if defined(__POPCNT__) || defined(__BMI__)
 #include <immintrin.h>
+#endif
 
 #include "types.h"
 
@@ -27,17 +24,29 @@ static inline Bitboard bitboard_rank(Rank rank) {
 }
 
 static inline uint8_t popcount(Bitboard bitboard) {
+#ifdef __POPCNT__
   return _mm_popcnt_u64(bitboard);
+#else
+  return __builtin_popcountll(bitboard);
+#endif
 }
 
 static inline Square lsb(Bitboard bitboard) {
   assert(bitboard != 0);
 
+#ifdef __BMI__
   return _tzcnt_u64(bitboard);
+#else
+  return __builtin_ctzll(bitboard);
+#endif
 }
 
 static inline Bitboard clear_lsb(Bitboard bitboard) {
+#ifdef __BMI__
   return _blsr_u64(bitboard);
+#else
+  return bitboard & bitboard-1;
+#endif
 }
 
 static inline Square pop_lsb(Bitboard *bitboard) {
