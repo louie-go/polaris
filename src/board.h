@@ -27,6 +27,6 @@ typedef struct {
   Square       ep_square;
 } Board;
 
-void make_move(Board *, Move);
-void undo_move(Board *);
-void print_board(const Board *, FILE *);
+void make_move(Board *board, Move move);
+void undo_move(Board *board);
+void print_board(const Board *board, FILE *stream);

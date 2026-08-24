@@ -56,4 +56,4 @@ static inline Square pop_lsb(Bitboard *bitboard) {
   return square;
 }
 
-void print_bitboard(Bitboard bitboard, FILE *);
+void print_bitboard(Bitboard bitboard, FILE *stream);

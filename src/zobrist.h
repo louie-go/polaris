@@ -6,5 +6,5 @@
 
 typedef uint64_t Zobrist;
 
-void init_zobrist(uint64_t);
-Zobrist hash_board(const Board *);
+void init_zobrist(uint64_t seed);
+Zobrist hash_board(const Board *board);

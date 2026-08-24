@@ -57,7 +57,7 @@ static inline Rank parse_rank(char rank_char) {
   return rank_char - '1';
 }
 
-Square parse_square(const char *);
-CastleRights parse_rights(const char *);
-Move parse_move(const char *);
-void parse_fen(const char *, Board *);
+Square parse_square(const char *square_str);
+CastleRights parse_rights(const char *rights_str);
+Move parse_move(const char *move_str);
+void parse_fen(const char *, Board *fen);

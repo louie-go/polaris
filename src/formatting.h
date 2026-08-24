@@ -61,7 +61,7 @@ static inline char format_rank(Rank rank) {
   return rank + '1';
 }
 
-char *format_square(Square, char *);
-char *format_rights(CastleRights, char *);
-char *format_move(Move, char *);
-char *format_fen(const Board *, char *);
+char *format_square(Square square, char *buffer);
+char *format_rights(CastleRights rights, char *buffer);
+char *format_move(Move move, char *buffer);
+char *format_fen(const Board *board, char *buffer);
