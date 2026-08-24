@@ -26,7 +26,7 @@ void print_board(const Board *board, FILE *stream) {
   fputs("  a b c d e f g h\n", stream);
 
 #ifndef NDEBUG
-  char fen[93];
+  char fen[FEN_BUFFER_MAX];
   format_fen(board, fen);
 
   fputc('\n', stream);

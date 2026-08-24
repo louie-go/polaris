@@ -49,8 +49,6 @@ Move parse_move(const char *move_str) {
   return src | dst<<6 | type<<12;
 }
 
-#include "formatting.h"
-
 void parse_fen(const char *fen, Board *board) {
   /************************
    *        BOARD         *

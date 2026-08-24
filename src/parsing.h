@@ -5,6 +5,8 @@
 #include "board.h"
 #include "types.h"
 
+static const uint8_t FEN_BUFFER_MAX = 93;
+
 static inline Color parse_color(char color_char) {
   assert(color_char == 'w' || color_char == 'b');
 
