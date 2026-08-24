@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdint.h>
+#include <stdio.h>
 
 #if defined(__POPCNT__) || defined(__BMI__)
 #include <immintrin.h>
