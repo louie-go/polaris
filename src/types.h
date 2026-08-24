@@ -117,11 +117,11 @@ static inline Move new_move(Square src, Square dst, MoveType type) {
 }
 
 static inline Square move_src(Move move) {
-  return move & 0x3F;
+  return move & 63;
 }
 
 static inline Square move_dst(Move move) {
-  return (move>>6) & 0x3F;
+  return (move>>6) & 63;
 }
 
 static inline MoveType move_type(Move move) {
