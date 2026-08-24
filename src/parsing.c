@@ -94,8 +94,7 @@ void parse_fen(const char *fen, Board *board) {
   /************************
    *     CASTLE RIGHTS    *
    ************************/
-  fen++;
-  assert(*fen == ' ');
+  assert(*++fen == ' ');
   board->rights = parse_rights(++fen);
 
   /************************
@@ -118,8 +117,8 @@ void parse_fen(const char *fen, Board *board) {
   /************************
    *   FULL MOVE NUMBER   *
    ************************/
-  fen++;
   assert(*fen == ' ');
+  fen++;
   board->fullmove_no = 0;
   while (*fen >= '0' && *fen <= '9') {
     board->fullmove_no = board->fullmove_no*10 + (*fen-'0');
