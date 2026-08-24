@@ -14,6 +14,10 @@
 
 typedef uint64_t Bitboard;
 
+static inline Bitboard new_bitboard(Square square) {
+  return 1ULL << square;
+}
+
 static inline Bitboard bitboard_file(File file) {
   return 0x101010101010101ULL << file;
 }
@@ -34,6 +38,12 @@ static inline Square lsb(Bitboard bitboard) {
 
 static inline Bitboard clear_lsb(Bitboard bitboard) {
   return _blsr_u64(bitboard);
+}
+
+static inline Square pop_lsb(Bitboard *bitboard) {
+  Square square = lsb(*bitboard);
+  *bitboard = clear_lsb(*bitboard);
+  return square;
 }
 
 void print_bitboard(Bitboard bitboard, FILE *);

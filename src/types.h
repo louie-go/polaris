@@ -97,6 +97,7 @@ enum {
 };
 
 typedef uint16_t Move;
+
 static inline Move new_move(Square src, Square dst, MoveType type) {
   return src | dst<<6 | type<<12;
 }
