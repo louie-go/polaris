@@ -10,5 +10,7 @@
 #error "requires BMI2"
 #endif
 
+static const uint8_t MAX_MOVES = 218;
+
 uint8_t legal_moves(const Board *, Move *);
 uint8_t pseudo_legal_moves(const Board *, Move *);
