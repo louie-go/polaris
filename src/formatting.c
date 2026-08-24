@@ -31,8 +31,8 @@ char *format_rights(CastleRights rights, char *buffer) {
     return buffer;
   }
 
-  for (CastleRights right = CASTLE_WK; right <= (1<<(CASTLE_LEN-1)); right <<= 1)
-    switch (right&rights) {
+  for (CastleRights right = CASTLE_WK; right < 1<<CASTLE_LEN; right <<= 1)
+    switch (right & rights) {
       case CASTLE_WK: *buffer++ = 'K'; break;
       case CASTLE_WQ: *buffer++ = 'Q'; break;
       case CASTLE_BK: *buffer++ = 'k'; break;

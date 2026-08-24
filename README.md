@@ -8,6 +8,6 @@ A chess engine written in C.
 - [ ] Implement move generation.
 - [ ] Implement evaluation via NNUE.
 - [ ] Add fallback for functions with intrinsics.
-- [ ] Implement Zobrist hashing.
+- [x] Implement Zobrist hashing.
 - [ ] Implement PGN formatting.
 - [ ] Implement states for `undo_move`.

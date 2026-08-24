@@ -7,6 +7,7 @@
 #include "formatting.h"
 #include "parsing.h"
 #include "types.h"
+#include "zobrist.h"
 
 void print_board(const Board *board, FILE *stream) {
   for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
@@ -29,8 +30,6 @@ void print_board(const Board *board, FILE *stream) {
   char fen[FEN_BUFFER_MAX];
   format_fen(board, fen);
 
-  fputc('\n', stream);
-  fputs(fen, stream);
-  fputc('\n', stream);
+  fprintf(stream, "\nfen %s zobrist 0x%016" PRIX64 "\n", fen, hash_board(board));
 #endif
 }
