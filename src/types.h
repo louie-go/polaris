@@ -82,7 +82,7 @@ enum {
   CASTLE_ALL   = 15,
 };
 
-typedef int8_t MoveType;
+typedef uint8_t MoveType;
 enum {
   MOVE_NORMAL,
   MOVE_PROMO_N,
@@ -112,4 +112,16 @@ static inline Square move_dst(Move move) {
 
 static inline MoveType move_type(Move move) {
   return move >> 12;
+}
+
+static inline Move set_move_src(Square src, Move move) {
+  return move | src;
+}
+
+static inline Move set_move_dst(Square dst, Move move) {
+  return move | dst<<6;
+}
+
+static inline Move set_move_type(MoveType type, Move move) {
+  return move | type<<12;
 }
