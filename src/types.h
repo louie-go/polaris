@@ -7,6 +7,8 @@ typedef int8_t Color;
 enum { COLOR_NONE = -1, WHITE, BLACK, ALL, COLOR_LEN = 2 };
 
 static inline Color opposite(Color color) {
+  assert(color > COLOR_NONE && color < COLOR_LEN);
+
   return color ^ 1;
 }
 
@@ -17,17 +19,24 @@ typedef int8_t Piece;
 enum { PIECE_NONE = -1,
   WHITE_PAWN = PAWN,   WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING,
   BLACK_PAWN = PAWN+8, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING,
-  PIECE_LEN };
+  PIECE_MAX };
 
 static inline Piece new_piece(Color color, PieceType piecetype) {
+  assert(color > COLOR_NONE && color < COLOR_LEN);
+  assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
+
   return (color<<3) | piecetype;
 }
 
 static inline Color piece_color(Piece piece) {
+  assert(piece > PIECE_NONE && piece < PIECE_MAX);
+
   return piece >> 3;
 }
 
 static inline PieceType piece_type(Piece piece) {
+  assert(piece > PIECE_NONE && piece < PIECE_MAX);
+
   return piece & 7;
 }
 
@@ -82,6 +91,7 @@ enum {
   CASTLE_ALL   = 15,
 };
 
+// no reason to add a `MOVE_NONE` or `MOVE_LEN`
 typedef uint8_t MoveType;
 enum {
   MOVE_NORMAL,
@@ -99,6 +109,10 @@ enum {
 typedef uint16_t Move;
 
 static inline Move new_move(Square src, Square dst, MoveType type) {
+  assert(src > SQUARE_NONE && src < SQUARE_LEN);
+  assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
+  assert(type >= MOVE_NORMAL && type <= MOVE_EP);
+
   return src | dst<<6 | type<<12;
 }
 
@@ -115,13 +129,19 @@ static inline MoveType move_type(Move move) {
 }
 
 static inline Move set_move_src(Square src, Move move) {
+  assert(src > SQUARE_NONE && src < SQUARE_LEN);
+
   return move | src;
 }
 
 static inline Move set_move_dst(Square dst, Move move) {
+  assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
+
   return move | dst<<6;
 }
 
 static inline Move set_move_type(MoveType type, Move move) {
+  assert(type >= MOVE_NORMAL && type <= MOVE_EP);
+
   return move | type<<12;
 }

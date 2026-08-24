@@ -9,7 +9,7 @@
 Square parse_square(const char *square_str) {
   if (*square_str == '-') return SQUARE_NONE;
 
-  return (parse_rank(square_str[1])<<3) + parse_file(*square_str);
+  return new_square(parse_file(*square_str), parse_rank(square_str[1]));
 }
 
 CastleRights parse_rights(const char *rights_str) {
@@ -36,17 +36,18 @@ CastleRights parse_rights(const char *rights_str) {
 }
 
 // TODO: better move parsing (more compliant to `MoveType`)
+// * NOTE: would need `const Board *` as an argument
 Move parse_move(const char *move_str) {
   Square src = parse_square(move_str);
   Square dst = parse_square(move_str + 2);
+  Move move = new_move(src, dst, MOVE_NORMAL);
 
   char promo_char = move_str[4];
   if (promo_char == '\0')
-    return src | dst<<6;
+    return move;
 
   // `Piece` and `MoveType` overlap (check `types.h`)
-  MoveType type = parse_piecetype(promo_char);
-  return src | dst<<6 | type<<12;
+  return set_move_type(parse_piecetype(promo_char), move);
 }
 
 void parse_fen(const char *fen, Board *board) {
@@ -61,13 +62,12 @@ void parse_fen(const char *fen, Board *board) {
   }
   File file = FILE_NONE+1; Rank rank = RANK_LEN-1;
   for (; *fen != ' '; fen++, file++) {
-    Square square = (rank<<3) + file;
-
+    Square square = new_square(file, rank);
     if (*fen == 'P' || *fen == 'N' || *fen == 'B' || *fen == 'R' || *fen == 'Q' || *fen == 'K' ||
         *fen == 'p' || *fen == 'n' || *fen == 'b' || *fen == 'r' || *fen == 'q' || *fen == 'k') { 
       Piece piece = parse_piece(*fen);
       Color color = piece_color(piece);
-      Bitboard bb_square = 1ULL<<square;
+      Bitboard bb_square = new_bitboard(square);
 
       board->bitboards[color][piece_type(piece)] |= bb_square;
       board->occupancies[color] |= bb_square;
@@ -92,7 +92,8 @@ void parse_fen(const char *fen, Board *board) {
   /************************
    *     CASTLE RIGHTS    *
    ************************/
-  assert(*++fen == ' ');
+  fen++;
+  assert(*fen == ' ');
   board->rights = parse_rights(++fen);
 
   /************************

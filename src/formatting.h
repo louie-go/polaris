@@ -5,6 +5,8 @@
 #include "board.h"
 #include "types.h"
 
+static const uint8_t FEN_BUFFER_MAX = 93;
+
 static inline char format_color(Color color) {
   assert(color > COLOR_NONE && color < COLOR_LEN);
 
@@ -27,7 +29,7 @@ static inline char format_piecetype(PieceType piecetype) {
 }
 
 static inline char format_piece(Piece piece) {
-  assert(piece > PIECE_NONE && piece < PIECE_LEN);
+  assert(piece > PIECE_NONE && piece < PIECE_MAX);
 
   switch (piece) {
     case WHITE_PAWN: return 'P';

@@ -15,8 +15,8 @@ char *format_square(Square square, char *buffer) {
 
   assert(square > SQUARE_NONE && square < SQUARE_LEN);
 
-  *buffer++ = format_file(square%8);
-  *buffer++ = format_rank(square/8);
+  *buffer++ = format_file(square_file(square));
+  *buffer++ = format_rank(square_rank(square));
   *buffer = '\0';
 
   return buffer;
@@ -61,7 +61,7 @@ char *format_fen(const Board *board, char *buffer) {
    ************************/
   for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
     for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Square square = (rank<<3) + file;
+      Square square = new_square(file, rank);
       Piece piece = board->pieces[square];
 
       if (piece != PIECE_NONE) *buffer++ = format_piece(piece);
@@ -102,7 +102,7 @@ char *format_fen(const Board *board, char *buffer) {
    *   FULL MOVE NUMBER   *
    ************************/
   *buffer++ = ' ';
-  sprintf(buffer, "%u", board->fullmove_no);
+  buffer += sprintf(buffer, "%u", board->fullmove_no);
 
   return buffer;
 }

@@ -13,7 +13,7 @@ void print_board(const Board *board, FILE *stream) {
     fputc(format_rank(rank), stream);
     fputc(' ', stream);
     for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Square square = (rank<<3) + file;
+      Square square = new_square(file, rank);
       Piece piece = board->pieces[square];
       if (piece != PIECE_NONE) fputc(format_piece(piece), stream);
       else fputc('.', stream);

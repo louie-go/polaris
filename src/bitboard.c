@@ -11,7 +11,7 @@ void print_bitboard(Bitboard bitboard, FILE *stream) {
     fputc(format_rank(rank), stream);
     fputc(' ', stream);
     for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Bitboard bb_square = 1ULL<<(rank*8 + file);
+      Bitboard bb_square = new_bitboard(new_square(file, rank));
       if (bb_square & bitboard) fputc('*', stream);
       else fputc('.', stream);
       fputc(' ', stream);
@@ -24,9 +24,11 @@ void print_bitboard(Bitboard bitboard, FILE *stream) {
 
 #ifndef NDEBUG
   char lsb_str[3];
-  format_square(bitboard!=0 ? lsb(bitboard) : SQUARE_NONE, lsb_str);
+  format_square(
+    bitboard!=0 ? lsb(bitboard) : SQUARE_NONE,
+    lsb_str);
 
   fprintf(stream, "\nvalue 0x%" PRIX64 " count %" PRIu8 " lsb %s\n",
-      bitboard, popcount(bitboard), lsb_str);
+    bitboard, popcount(bitboard), lsb_str);
 #endif
 }
