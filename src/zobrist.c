@@ -50,8 +50,8 @@ Zobrist hash_board(const Board *board) {
     if (right & board->rights)
       hash ^= castle_hashes[lsb(right)];
 
-  if (board->ep_square != SQUARE_NONE)
-    hash ^= ep_hash[square_file(board->ep_square)];
+  if (board->ep != FILE_NONE)
+    hash ^= ep_hash[board->ep];
 
   return hash;
 }

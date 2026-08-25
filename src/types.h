@@ -106,6 +106,9 @@ enum {
   MOVE_EP,
 };
 
+// bits 1-6:   source square
+// bits 7-12:  destination square
+// bits 13-16: move type
 typedef uint16_t Move;
 
 static inline Move new_move(Square src, Square dst, MoveType type) {

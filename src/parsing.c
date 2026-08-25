@@ -100,7 +100,8 @@ void parse_fen(const char *fen, Board *board) {
    *   EN PASSANT SQUARE  *
    ************************/
   while (*fen != ' ') fen++;
-  board->ep_square = parse_square(++fen);
+  if (*++fen == '-') board->ep = FILE_NONE;
+  else board->ep = square_file(parse_square(fen));
 
   /************************
    *    HALF MOVE CLOCK   *
