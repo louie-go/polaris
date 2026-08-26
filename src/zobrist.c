@@ -1,6 +1,5 @@
 #include "zobrist.h"
 
-#include "bitboard.h"
 #include "types.h"
 
 static Zobrist board_hashes[COLOR_LEN][PIECETYPE_LEN][SQUARE_LEN];
@@ -47,8 +46,12 @@ Zobrist hash_board(const Board *board) {
   hash ^= turn_hash[board->turn];
   
   for (CastleRights right = CASTLE_WK; right < 1<<CASTLE_LEN; right <<= 1)
-    if (right & board->rights)
-      hash ^= castle_hashes[lsb(right)];
+    switch (right & board->rights) {
+      case CASTLE_WK: hash ^= castle_hashes[0]; break;
+      case CASTLE_WQ: hash ^= castle_hashes[1]; break;
+      case CASTLE_BK: hash ^= castle_hashes[2]; break;
+      case CASTLE_BQ: hash ^= castle_hashes[3]; break;
+    }
 
   if (board->ep != FILE_NONE)
     hash ^= ep_hash[board->ep];
