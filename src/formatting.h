@@ -13,40 +13,18 @@ static inline char format_color(Color color) {
   return color == WHITE ? 'w' : 'b';
 }
 
+static const char piecetype_chars[PIECETYPE_LEN] = "pnbrqk";
 static inline char format_piecetype(PieceType piecetype) {
   assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
 
-  switch (piecetype) {
-    case PAWN: return 'p';
-    case KNIGHT: return 'n';
-    case BISHOP: return 'b';
-    case ROOK: return 'r';
-    case QUEEN: return 'q';
-    case KING: return 'k';
-  }
-
-  return 0;
+  return piecetype_chars[piecetype];
 }
 
+static const char piece_chars[PIECE_LEN] = "PpNnBbRrQqKk";
 static inline char format_piece(Piece piece) {
-  assert(piece > PIECE_NONE && piece < PIECE_MAX);
+  assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
-  switch (piece) {
-    case WHITE_PAWN: return 'P';
-    case WHITE_KNIGHT: return 'N';
-    case WHITE_BISHOP: return 'B';
-    case WHITE_ROOK: return 'R';
-    case WHITE_QUEEN: return 'Q';
-    case WHITE_KING: return 'K';
-    case BLACK_PAWN: return 'p';
-    case BLACK_KNIGHT: return 'n';
-    case BLACK_BISHOP: return 'b';
-    case BLACK_ROOK: return 'r';
-    case BLACK_QUEEN: return 'q';
-    case BLACK_KING: return 'k';
-  }
-
-  return 0;
+  return piece_chars[piece];
 }
 
 static inline char format_file(File file) {

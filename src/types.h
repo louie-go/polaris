@@ -17,27 +17,31 @@ enum { PIECETYPE_NONE = -1, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, PIECETYPE_L
 
 typedef int8_t Piece;
 enum { PIECE_NONE = -1,
-  WHITE_PAWN = PAWN,   WHITE_KNIGHT, WHITE_BISHOP, WHITE_ROOK, WHITE_QUEEN, WHITE_KING,
-  BLACK_PAWN = PAWN+8, BLACK_KNIGHT, BLACK_BISHOP, BLACK_ROOK, BLACK_QUEEN, BLACK_KING,
-  PIECE_MAX };
+  WHITE_PAWN,   BLACK_PAWN,
+  WHITE_KNIGHT, BLACK_KNIGHT,
+  WHITE_BISHOP, BLACK_BISHOP,
+  WHITE_ROOK,   BLACK_ROOK,
+  WHITE_QUEEN,  BLACK_QUEEN,
+  WHITE_KING,   BLACK_KING,
+  PIECE_LEN };
 
 static inline Piece new_piece(Color color, PieceType piecetype) {
   assert(color > COLOR_NONE && color < COLOR_LEN);
   assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
 
-  return (color<<3) | piecetype;
+  return color | piecetype<<1;
 }
 
 static inline Color piece_color(Piece piece) {
-  assert(piece > PIECE_NONE && piece < PIECE_MAX);
+  assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
-  return piece >> 3;
+  return piece & 1;
 }
 
 static inline PieceType piece_type(Piece piece) {
-  assert(piece > PIECE_NONE && piece < PIECE_MAX);
+  assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
-  return piece & 7;
+  return piece >> 1;
 }
 
 typedef int8_t File;
