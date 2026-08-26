@@ -69,11 +69,11 @@ static inline Square new_square(File file, Rank rank) {
 }
 
 static inline File square_file(Square square) {
-  return square % 8;
+  return square & 7;
 }
 
 static inline Rank square_rank(Square square) {
-  return square / 8;
+  return square >> 3;
 }
 
 typedef uint8_t CastleRights;
