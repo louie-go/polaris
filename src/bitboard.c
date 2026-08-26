@@ -11,8 +11,8 @@ void print_bitboard(Bitboard bitboard, FILE *stream) {
     fputc(format_rank(rank), stream);
     fputc(' ', stream);
     for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Bitboard bb_square = new_bitboard(new_square(file, rank));
-      if (bb_square & bitboard) fputc('*', stream);
+      Bitboard sq_bb = new_bitboard(new_square(file, rank));
+      if (sq_bb & bitboard) fputc('*', stream);
       else fputc('.', stream);
       fputc(' ', stream);
     }

@@ -69,11 +69,11 @@ void parse_fen(const char *fen, Board *board) {
         *fen == 'p' || *fen == 'n' || *fen == 'b' || *fen == 'r' || *fen == 'q' || *fen == 'k') { 
       Piece piece = parse_piece(*fen);
       Color color = piece_color(piece);
-      Bitboard bb_square = new_bitboard(square);
+      Bitboard sq_bb = new_bitboard(square);
 
-      board->bitboards[color][piece_type(piece)] |= bb_square;
-      board->occupancies[color] |= bb_square;
-      board->occupancies[ALL] |= bb_square;
+      board->bitboards[color][piece_type(piece)] |= sq_bb;
+      board->occupancies[color] |= sq_bb;
+      board->occupancies[ALL] |= sq_bb;
       board->pieces[square] = piece;
     } else if (*fen >= '1' && *fen <= '8') {
       for (Square empty = square; empty < square+(*fen-'0'); empty++)
