@@ -40,7 +40,7 @@ CastleRights parse_rights(const char *rights_str) {
 Move parse_move(const char *move_str) {
   Square src = parse_square(move_str);
   Square dst = parse_square(move_str + 2);
-  Move move = new_move(src, dst, MOVE_NORMAL);
+  Move move = new_move(src, dst, MOVE_QUIET);
 
   char promo_char = move_str[4];
   if (promo_char == '\0')

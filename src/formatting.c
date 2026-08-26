@@ -59,6 +59,7 @@ char *format_fen(const Board *board, char *buffer) {
   /************************
    *        BOARD         *
    ************************/
+  char *start = buffer;
   for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
     for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
       Square square = new_square(file, rank);
@@ -66,7 +67,9 @@ char *format_fen(const Board *board, char *buffer) {
 
       if (piece != PIECE_NONE) *buffer++ = format_piece(piece);
       else
-        if (buffer[-1] >= '1' && buffer[-1] <= '8') buffer[-1]++;
+        if (buffer != start
+            && buffer[-1] >= '1'
+            && buffer[-1] <= '8') buffer[-1]++;
         else *buffer++ = '1';
     }
 

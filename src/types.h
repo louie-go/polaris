@@ -98,7 +98,7 @@ enum {
 // no reason to add a `MOVE_NONE` or `MOVE_LEN`
 typedef uint8_t MoveType;
 enum {
-  MOVE_NORMAL,
+  MOVE_QUIET,
   MOVE_PROMO_N,
   MOVE_PROMO_B,
   MOVE_PROMO_R,
@@ -108,6 +108,7 @@ enum {
   MOVE_CASTLE_BK,
   MOVE_CASTLE_BQ,
   MOVE_EP,
+  MOVE_DOUBLE_PUSH,
 };
 
 // bits 1-6:   source square
@@ -118,7 +119,7 @@ typedef uint16_t Move;
 static inline Move new_move(Square src, Square dst, MoveType type) {
   assert(src > SQUARE_NONE && src < SQUARE_LEN);
   assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
-  assert(type >= MOVE_NORMAL && type <= MOVE_EP);
+  assert(type >= MOVE_QUIET && type <= MOVE_EP);
 
   return src | dst<<6 | type<<12;
 }
@@ -148,7 +149,7 @@ static inline Move set_move_dst(Square dst, Move move) {
 }
 
 static inline Move set_move_type(MoveType type, Move move) {
-  assert(type >= MOVE_NORMAL && type <= MOVE_EP);
+  assert(type >= MOVE_QUIET && type <= MOVE_EP);
 
   return move | type<<12;
 }

@@ -32,7 +32,7 @@ static inline Piece state_captured(State state) {
 typedef struct {
   State        states[MAX_GAME_PLY];
   Bitboard     bitboards[COLOR_LEN][PIECETYPE_LEN];
-  Piece        pieces[64];
+  Piece        pieces[SQUARE_LEN];
   // +1 for `ALL` (check `types.h`)
   Bitboard     occupancies[COLOR_LEN+1];
   uint16_t     ply;
