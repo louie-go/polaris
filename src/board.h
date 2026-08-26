@@ -44,10 +44,10 @@ typedef struct {
 } Board;
 
 static inline State new_state(const Board *board, Move move) {
-  return move
-    | board->halfmove_clk<<16
-    | board->rights<<24
-    | (board->pieces[move_dst(move)]+1)<<28;
+  return (State)move
+    | (State)board->halfmove_clk<<16
+    | (State)board->rights<<24
+    | (State)(board->pieces[move_dst(move)]+1)<<28;
 }
 
 static inline Square board_ep_square(const Board *board) {

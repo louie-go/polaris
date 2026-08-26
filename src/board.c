@@ -59,7 +59,7 @@ void make_move(Board *board, Move move) {
    ************************/
   if (type == MOVE_EP) {
     Square ep_piece = new_square(board->ep, square_rank(src));
-    Square ep_bb = new_bitboard(ep_piece);
+    Bitboard ep_bb = new_bitboard(ep_piece);
     board->bitboards[opposing][PAWN] ^= ep_bb;
     board->occupancies[opposing] ^= ep_bb;
     board->occupancies[ALL] ^= ep_bb;
@@ -94,7 +94,7 @@ void make_move(Board *board, Move move) {
       board->pieces[dst-2] = PIECE_NONE;
     }
 
-    board->rights ^= castle_turn;
+    board->rights &= ~castle_turn;
   } else if (src_type == KING)
     board->rights &= ~castle_turn;
 
