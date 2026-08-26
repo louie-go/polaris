@@ -28,7 +28,7 @@ void print_bitboard(Bitboard bitboard, FILE *stream) {
     bitboard!=0 ? lsb(bitboard) : SQUARE_NONE,
     lsb_str);
 
-  fprintf(stream, "\nvalue 0x%" PRIX64 " count %" PRIu8 " lsb %s\n",
+  fprintf(stream, "\nvalue 0x%016" PRIX64 " count %" PRIu8 " lsb %s\n",
     bitboard, popcount(bitboard), lsb_str);
 #endif
 }

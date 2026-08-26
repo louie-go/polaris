@@ -29,7 +29,7 @@ static inline Piece state_captured(State state) {
   return (state>>28 & 0xF) - 1;
 }
 
-struct Board {
+typedef struct {
   State        states[MAX_GAME_PLY];
   Bitboard     bitboards[COLOR_LEN][PIECETYPE_LEN];
   Piece        pieces[64];
@@ -41,7 +41,7 @@ struct Board {
   Color        turn;
   CastleRights rights;
   File         ep;
-};
+} Board;
 
 static inline State new_state(const Board *board, Move move) {
   return move
