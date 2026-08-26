@@ -14,7 +14,7 @@ static const Bitboard CASTLE_BB[CASTLE_LEN] = {
   0x00000000000000A0ULL,
   0x0000000000000009ULL,
   0xA000000000000000ULL,
-  0x0900000000000009ULL,
+  0x0900000000000000ULL,
 };
 void make_move(Board *board, Move move) {
   /************************
@@ -59,11 +59,20 @@ void make_move(Board *board, Move move) {
    ************************/
   if (type == MOVE_EP) {
     Square ep_piece = new_square(board->ep, square_rank(src));
-    board->bitboards[opposing][PAWN] ^= ep_piece;
-    board->occupancies[opposing] ^= ep_piece;
-    board->occupancies[ALL] ^= ep_piece;
+    Square ep_bb = new_bitboard(ep_piece);
+    board->bitboards[opposing][PAWN] ^= ep_bb;
+    board->occupancies[opposing] ^= ep_bb;
+    board->occupancies[ALL] ^= ep_bb;
     board->pieces[ep_piece] = PIECE_NONE;
   }
+
+  File src_file = square_file(src);
+  Bitboard adj = dst_bb>>1 | dst_bb<<1;
+  if (src_type == PAWN
+      && (dst-src == 16 || src-dst == 16)
+      && board->bitboards[opposing][PAWN] & adj)
+    board->ep = src_file;
+  else board->ep = FILE_NONE;
 
   /************************
    *       CASTLING       *
@@ -85,19 +94,18 @@ void make_move(Board *board, Move move) {
       board->pieces[dst-2] = PIECE_NONE;
     }
 
-    board->rights ^= 1<<castle_idx;
+    board->rights ^= castle_turn;
   } else if (src_type == KING)
     board->rights &= ~castle_turn;
 
   if (src_type == ROOK && (src <= H1 || src >= A8)) {
-    File src_file = square_file(src);
     if (src_file == FILE_A)
       board->rights &= ~(castle_turn & CASTLE_QUEEN);
     if (src_file == FILE_H)
       board->rights &= ~(castle_turn & CASTLE_KING);
   }
 
-  if (piece_type(captured) == ROOK && (dst <= H1 || dst >= A8)) {
+  if (captured != PIECE_NONE && piece_type(captured) == ROOK && (dst <= H1 || dst >= A8)) {
     File dst_file = square_file(dst);
     CastleRights castle_opposing = CASTLE_WHITE << (2*opposing);
     if (dst_file == FILE_A)

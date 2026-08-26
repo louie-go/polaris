@@ -51,6 +51,8 @@ Move parse_move(const char *move_str) {
 }
 
 void parse_fen(const char *fen, Board *board) {
+  board->ply = 0;
+
   /************************
    *        BOARD         *
    ************************/
