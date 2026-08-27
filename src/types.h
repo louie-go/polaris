@@ -1,6 +1,7 @@
 #pragma once
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 typedef int8_t Color;
@@ -152,4 +153,28 @@ static inline Move set_move_type(MoveType type, Move move) {
   assert(type >= MOVE_QUIET && type <= MOVE_EP);
 
   return move | type<<12;
+}
+
+static inline bool is_quiet(Move move) {
+  return move_type(move) == MOVE_QUIET;
+}
+
+static inline bool is_promotion(Move move) {
+  MoveType type = move_type(move);
+
+  return type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q;
+}
+
+static inline bool is_castle(Move move) {
+  MoveType type = move_type(move);
+
+  return type >= MOVE_CASTLE_WK && type <= MOVE_CASTLE_BQ;
+}
+
+static inline bool is_ep(Move move) {
+  return move_type(move) == MOVE_EP;
+}
+
+static inline bool is_double_push(Move move) {
+  return move_type(move) == MOVE_DOUBLE_PUSH;
 }
