@@ -40,7 +40,7 @@ typedef struct {
   uint8_t      halfmove_clk;
   Color        turn;
   CastleRights rights;
-  File         ep;
+  Square         ep_square;
 } Board;
 
 static inline State new_state(const Board *board, Move move) {
@@ -48,14 +48,6 @@ static inline State new_state(const Board *board, Move move) {
     | (State)board->halfmove_clk<<16
     | (State)board->rights<<24
     | (State)(board->pieces[move_dst(move)]+1)<<28;
-}
-
-static inline Square board_ep_square(const Board *board) {
-  if (board->ep == FILE_NONE) return SQUARE_NONE;
-
-  return new_square(
-    board->ep,
-    board->turn == WHITE ? RANK_6 : RANK_3);
 }
 
 void make_move(Board *board, Move move);

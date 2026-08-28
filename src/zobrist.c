@@ -5,7 +5,7 @@
 static Zobrist board_hashes[COLOR_LEN][PIECETYPE_LEN][SQUARE_LEN];
 static Zobrist turn_hash[COLOR_LEN];
 static Zobrist castle_hashes[CASTLE_LEN];
-static Zobrist ep_hash[FILE_LEN];
+static Zobrist ep_hashes[FILE_LEN];
 
 static uint64_t state;
 static inline uint64_t rand64(void) {
@@ -31,7 +31,7 @@ void init_zobrist(uint64_t seed) {
     castle_hashes[right] = rand64();
 
   for (File file = FILE_NONE+1; file < FILE_LEN; file++)
-    ep_hash[file] = rand64();
+    ep_hashes[file] = rand64();
 }
 
 Zobrist hash_board(const Board *board) {
@@ -53,8 +53,8 @@ Zobrist hash_board(const Board *board) {
       case CASTLE_BQ: hash ^= castle_hashes[3]; break;
     }
 
-  if (board->ep != FILE_NONE)
-    hash ^= ep_hash[board->ep];
+  if (board->ep_square != SQUARE_NONE)
+    hash ^= ep_hashes[square_file(board->ep_square)];
 
   return hash;
 }

@@ -17,72 +17,74 @@ static const Bitboard CASTLE_BB[CASTLE_LEN] = {
   0x0900000000000000ULL,
 };
 void make_move(Board *board, Move move) {
-  /************************
-   *UPDATING CURRENT STATE*
-   ************************/
   board->states[board->ply++] = new_state(board, move);
 
-  /************************
-   *         MOVE         *
-   ************************/
   Square src = move_src(move), dst = move_dst(move);
   Bitboard src_bb = new_bitboard(src), dst_bb = new_bitboard(dst);
+
   Piece piece = board->pieces[src];
   Color src_color = piece_color(piece);
   PieceType src_type = piece_type(piece);
+
   MoveType type = move_type(move);
+
   Piece captured = board->pieces[dst];
+  Color opposing = opposite(board->turn);
 
   Bitboard move_bb = src_bb | dst_bb;
   board->occupancies[src_color] ^= move_bb;
-  board->occupancies[ALL] ^= move_bb;
   board->pieces[src] = PIECE_NONE;
 
-  if (type < MOVE_PROMO_N || type > MOVE_PROMO_Q) {
+  if (captured == PIECE_NONE)
+    board->occupancies[ALL] ^= move_bb;
+
+  if (!is_promotion(move)) {
     board->bitboards[src_color][src_type] ^= move_bb;
     board->pieces[dst] = piece;
   }
 
-  /************************
-   *        CAPTURE       *
-   ************************/
-  Color opposing = opposite(board->turn);
   if (captured != PIECE_NONE) {
-    PieceType captured_type = piece_type(captured);
-    board->bitboards[opposing][captured_type] ^= dst_bb;
+    board->bitboards[opposing][piece_type(captured)] ^= dst_bb;
     board->occupancies[opposing] ^= dst_bb;
-    board->occupancies[ALL] ^= dst_bb;
+    board->occupancies[ALL] ^= src_bb;
   }
 
-  /************************
-   *      EN PASSANT      *
-   ************************/
-  if (type == MOVE_EP) {
-    Square ep_piece = new_square(board->ep, square_rank(src));
+  CastleRights castle_turn = CASTLE_WHITE << (board->turn<<1);
+
+  if (src_type == KING)
+    board->rights &= ~castle_turn;
+
+  if (src_type == ROOK && (src <= H1 || src >= A8)) {
+    File src_file = square_file(src);
+    if (src_file == FILE_A)
+      board->rights &= ~(castle_turn & CASTLE_QUEEN);
+    if (src_file == FILE_H)
+      board->rights &= ~(castle_turn & CASTLE_KING);
+  }
+
+  if (piece_type(captured) == ROOK &&
+      (dst <= H1 || dst >= A8)) {
+    File dst_file = square_file(dst);
+    CastleRights castle_opposing = CASTLE_WHITE << (opposing<<1);
+    if (dst_file == FILE_A)
+      board->rights &= ~(castle_opposing & CASTLE_QUEEN);
+    if (dst_file == FILE_H)
+      board->rights &= ~(castle_opposing & CASTLE_KING);
+  }
+
+  if (is_ep(move)) {
+    Square ep_piece = board->ep_square + (board->turn == WHITE ?
+      +8 : -8);
     Bitboard ep_bb = new_bitboard(ep_piece);
     board->bitboards[opposing][PAWN] ^= ep_bb;
     board->occupancies[opposing] ^= ep_bb;
     board->occupancies[ALL] ^= ep_bb;
     board->pieces[ep_piece] = PIECE_NONE;
-  }
-
-  File src_file = square_file(src);
-  Bitboard adj = dst_bb>>1 | dst_bb<<1;
-  if (src_type == PAWN
-      && (dst-src == 16 || src-dst == 16)
-      && board->bitboards[opposing][PAWN] & adj)
-    board->ep = src_file;
-  else board->ep = FILE_NONE;
-
-  /************************
-   *       CASTLING       *
-   ************************/
-  CastleRights castle_turn = CASTLE_WHITE << (2*board->turn);
-  if (type >= MOVE_CASTLE_WK && type <= MOVE_CASTLE_BQ) {
-    uint8_t castle_idx = type-MOVE_CASTLE_WK;
-    board->bitboards[board->turn][ROOK] ^= CASTLE_BB[castle_idx];
-    board->occupancies[board->turn] ^= CASTLE_BB[castle_idx];
-    board->occupancies[ALL] ^= CASTLE_BB[castle_idx];
+  } else if (is_castle(move)) {
+    Bitboard rook_move = CASTLE_BB[type-MOVE_CASTLE_WK];
+    board->bitboards[board->turn][ROOK] ^= rook_move;
+    board->occupancies[board->turn] ^= rook_move;
+    board->occupancies[ALL] ^= rook_move;
 
     if (type == MOVE_CASTLE_WK || type == MOVE_CASTLE_BK) {
       board->pieces[src+1] = new_piece(board->turn, ROOK);
@@ -91,45 +93,27 @@ void make_move(Board *board, Move move) {
 
     if (type == MOVE_CASTLE_WQ || type == MOVE_CASTLE_BQ) {
       board->pieces[src-1] = new_piece(board->turn, ROOK);
-      board->pieces[dst-2] = PIECE_NONE;
+      board->pieces[dst-1] = PIECE_NONE;
     }
 
     board->rights &= ~castle_turn;
-  } else if (src_type == KING)
-    board->rights &= ~castle_turn;
-
-  if (src_type == ROOK && (src <= H1 || src >= A8)) {
-    if (src_file == FILE_A)
-      board->rights &= ~(castle_turn & CASTLE_QUEEN);
-    if (src_file == FILE_H)
-      board->rights &= ~(castle_turn & CASTLE_KING);
-  }
-
-  if (captured != PIECE_NONE && piece_type(captured) == ROOK && (dst <= H1 || dst >= A8)) {
-    File dst_file = square_file(dst);
-    CastleRights castle_opposing = CASTLE_WHITE << (2*opposing);
-    if (dst_file == FILE_A)
-      board->rights &= ~(castle_opposing & CASTLE_QUEEN);
-    if (dst_file == FILE_H)
-      board->rights &= ~(castle_opposing & CASTLE_KING);
-  }
-
-  /************************
-   *       PROMOTION      *
-   ************************/
-  if (type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q) {
+  } else if (is_promotion(move)) {
     // `Piece` and `MoveType` overlap (check `types.h`)
+    board->bitboards[src_color][PAWN] ^= src_bb;
     board->bitboards[board->turn][type] |= dst_bb;
     board->pieces[dst] = new_piece(board->turn, type);
-    board->bitboards[src_color][PAWN] ^= src_bb;
   }
 
-  /************************
-   *  UPDATING BOARD INFO *
-   ************************/
-  board->turn = opposite(board->turn);
+  board->turn = opposing;
+  
+  if (src_type == PAWN && is_double_push(move))
+    board->ep_square = src +
+      (board->turn == WHITE ? -8 : +8);
+  else board->ep_square = SQUARE_NONE;
+
   if (src_type != PAWN && captured == PIECE_NONE) board->halfmove_clk++;
   else board->halfmove_clk = 0;
+
   if (board->turn == WHITE) board->fullmove_no++;
 }
 

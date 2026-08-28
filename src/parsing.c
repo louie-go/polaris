@@ -40,7 +40,7 @@ CastleRights parse_rights(const char *rights_str) {
 Move parse_move(const char *move_str) {
   Square src = parse_square(move_str);
   Square dst = parse_square(move_str + 2);
-  Move move = new_move(src, dst, MOVE_QUIET);
+  Move move = new_move(src, dst, MOVE_NORMAL);
 
   char promo_char = move_str[4];
   if (promo_char == '\0')
@@ -102,8 +102,7 @@ void parse_fen(const char *fen, Board *board) {
    *   EN PASSANT SQUARE  *
    ************************/
   while (*fen != ' ') fen++;
-  if (*++fen == '-') board->ep = FILE_NONE;
-  else board->ep = square_file(parse_square(fen));
+  board->ep_square = parse_square(++fen);
 
   /************************
    *    HALF MOVE CLOCK   *

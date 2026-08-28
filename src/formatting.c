@@ -92,7 +92,7 @@ char *format_fen(const Board *board, char *buffer) {
    *   EN PASSANT SQUARE  *
    ************************/
   *buffer++ = ' ';
-  buffer = format_square(board_ep_square(board), buffer);
+  buffer = format_square(board->ep_square, buffer);
 
   /************************
    *    HALF MOVE CLOCK   *
