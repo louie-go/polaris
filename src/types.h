@@ -26,20 +26,26 @@ enum { PIECE_NONE = -1,
   WHITE_KING,   BLACK_KING,
   PIECE_LEN };
 
-static inline Piece new_piece(Color color, PieceType piecetype) {
+static inline Piece new_piece(Color color, PieceType type) {
+  if (color == COLOR_NONE && type == PIECETYPE_NONE) return PIECE_NONE;
+
   assert(color > COLOR_NONE && color < COLOR_LEN);
-  assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
+  assert(type > PIECETYPE_NONE && type < PIECETYPE_LEN);
 
   return color | piecetype<<1;
 }
 
 static inline Color piece_color(Piece piece) {
+  if (piece == PIECE_NONE) return COLOR_NONE;
+
   assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
   return piece & 1;
 }
 
 static inline PieceType piece_type(Piece piece) {
+  if (piece == PIECE_NONE) return PIECETYPE_NONE;
+
   assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
   return piece >> 1;
@@ -178,3 +184,4 @@ static inline bool is_ep(Move move) {
 static inline bool is_double_push(Move move) {
   return move_type(move) == MOVE_DOUBLE_PUSH;
 }
+
