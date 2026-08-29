@@ -48,9 +48,8 @@ char *format_move(Move move, char *buffer) {
   buffer = format_square(move_dst(move), buffer);
 
   MoveType type = move_type(move);
-  if (type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q)
-    // `Piece` and `MoveType` overlap (check `types.h`)
-    *buffer++ = format_piecetype(type);
+  if (is_promotion(move))
+    *buffer++ = format_piecetype(type-MOVE_PROMO_N + KNIGHT);
 
   return buffer;
 }

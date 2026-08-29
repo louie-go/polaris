@@ -46,8 +46,7 @@ Move parse_move(const char *move_str) {
   if (promo_char == '\0')
     return move;
 
-  // `Piece` and `MoveType` overlap (check `types.h`)
-  return set_move_type(parse_piecetype(promo_char), move);
+  return set_move_type(parse_piecetype(promo_char)+MOVE_PROMO_N - KNIGHT, move);
 }
 
 void parse_fen(const char *fen, Board *board) {
