@@ -76,10 +76,18 @@ static inline Square new_square(File file, Rank rank) {
 }
 
 static inline File square_file(Square square) {
+  if (square == SQUARE_NONE) return FILE_NONE;
+
+  assert(square > SQUARE_NONE && square < SQUARE_LEN);
+
   return square & 7;
 }
 
 static inline Rank square_rank(Square square) {
+  if (square == SQUARE_NONE) return RANK_NONE;
+
+  assert(square > SQUARE_NONE && square < SQUARE_LEN);
+
   return square >> 3;
 }
 
