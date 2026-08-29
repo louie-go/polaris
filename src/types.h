@@ -110,6 +110,10 @@ enum {
   CASTLE_ALL   = 15,
 };
 
+static inline CastleRights castle_color(Color color) {
+  return CASTLE_WHITE << (color<<1);
+}
+
 // no reason to add a `MOVE_NONE` or `MOVE_LEN`
 typedef uint8_t MoveType;
 enum {
