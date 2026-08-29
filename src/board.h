@@ -59,7 +59,6 @@ typedef struct {
 } Board;
 
 static inline State new_state(const Board *board, Move move) {
-  Square dst = move_dst(move);
   MoveType type = move_type(move);
   PieceType promotion = type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q ?
     (type) : 1;
@@ -67,7 +66,7 @@ static inline State new_state(const Board *board, Move move) {
   return (State)board->halfmove_clk
     | (State)(move & 0xFFF) << 8
     | (State)board->rights << 20
-    | (State)(piece_type(board->pieces[dst])+1) << 24
+    | (State)(piece_type(board->pieces[move_dst(move)])+1) << 24
     | (State)square_file(board->ep_square) << 27
     | (State)(promotion-1) << 30;
 }

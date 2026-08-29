@@ -32,7 +32,7 @@ static inline Piece new_piece(Color color, PieceType type) {
   assert(color > COLOR_NONE && color < COLOR_LEN);
   assert(type > PIECETYPE_NONE && type < PIECETYPE_LEN);
 
-  return color | piecetype<<1;
+  return color | type<<1;
 }
 
 static inline Color piece_color(Piece piece) {
@@ -184,4 +184,3 @@ static inline bool is_ep(Move move) {
 static inline bool is_double_push(Move move) {
   return move_type(move) == MOVE_DOUBLE_PUSH;
 }
-

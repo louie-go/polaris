@@ -26,10 +26,10 @@ void make_move(Board *board, Move move) {
   Color src_color = piece_color(piece);
   PieceType src_type = piece_type(piece);
 
-  MoveType type = move_type(move);
-
   Piece captured = board->pieces[dst];
   Color opposing = opposite(board->turn);
+
+  MoveType type = move_type(move);
 
   Bitboard move_bb = src_bb | dst_bb;
   board->occupancies[src_color] ^= move_bb;
@@ -62,8 +62,7 @@ void make_move(Board *board, Move move) {
       board->rights &= ~(castle_turn & CASTLE_KING);
   }
 
-  if (piece_type(captured) == ROOK &&
-      (dst <= H1 || dst >= A8)) {
+  if (piece_type(captured) == ROOK && (dst <= H1 || dst >= A8)) {
     File dst_file = square_file(dst);
     CastleRights castle_opposing = CASTLE_WHITE << (opposing<<1);
     if (dst_file == FILE_A)
@@ -93,7 +92,7 @@ void make_move(Board *board, Move move) {
 
     if (type == MOVE_CASTLE_WQ || type == MOVE_CASTLE_BQ) {
       board->pieces[src-1] = new_piece(board->turn, ROOK);
-      board->pieces[dst-1] = PIECE_NONE;
+      board->pieces[dst-2] = PIECE_NONE;
     }
 
     board->rights &= ~castle_turn;
