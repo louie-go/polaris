@@ -5,7 +5,7 @@
 #include "types.h"
 #include "bitboard.h"
 
-static const uint16_t MAX_GAME_PLY = 17697;
+#define MAX_GAME_PLY 17697
 
 typedef struct {
   Move         move;
