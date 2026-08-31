@@ -48,7 +48,7 @@ char *format_move(Move move, char *buffer) {
   buffer = format_square(move_dst(move), buffer);
 
   MoveType type = move_type(move);
-  if (is_promotion(move))
+  if (is_promotion(type))
     *buffer++ = format_piecetype(type-MOVE_PROMO_N + KNIGHT);
 
   *buffer = '\0';
