@@ -4,7 +4,7 @@ CFLAGS    := -std=c11 \
 						 -O3 \
 						 -flto \
 						 -fomit-frame-pointer \
-						 -mbmi -mbmi2 -mpopcnt -mavx2
+						 -march=native -mtune=native
 
 SRC_DIR   := ./src
 BUILD_DIR := ./build
