@@ -41,7 +41,6 @@ void make_move(Board *board, Move move) {
   /************************
    *       VARIABLES      *
    ************************/
-
   Square src = move_src(move), dst = move_dst(move);
   Bitboard src_bb = new_bitboard(src), dst_bb = new_bitboard(dst);
 
@@ -53,9 +52,9 @@ void make_move(Board *board, Move move) {
   Color opposing = opposite(turn);
 
   CastleRights *rights = &board->rights;
-  Bitboard *occupancies_turn  = &board->occupancies[turn];
-  Bitboard *occupancies_opposing   = &board->occupancies[opposing];
-  Bitboard *occupancies_all   = &board->occupancies[ALL];
+  Bitboard *occupancies_turn = &board->occupancies[turn];
+  Bitboard *occupancies_opposing = &board->occupancies[opposing];
+  Bitboard *occupancies_all = &board->occupancies[ALL];
 
   /************************
    *UPDATING CURRENT STATE*
@@ -146,6 +145,90 @@ void make_move(Board *board, Move move) {
   else board->ep_square = SQUARE_NONE;
 
   if (turn == BLACK) board->fullmove_no++;
+}
+
+void undo_move(Board *board) {
+  /************************
+   *       VARIABLES      *
+   ************************/
+  State state = board->states[--board->ply];
+
+  Move move = state.move;
+  MoveType type = move_type(move);
+
+  Square src = move_src(move), dst = move_dst(move);
+  Bitboard src_bb = new_bitboard(src), dst_bb = new_bitboard(dst);
+
+  Piece piece = board->pieces[dst];
+  Color turn = board->turn;
+  PieceType src_type = piece_type(piece);
+
+  Piece captured = state.captured;
+  Color opposing = opposite(turn);
+
+  Bitboard *occupancies_turn = &board->occupancies[turn];
+  Bitboard *occupancies_opposing = &board->occupancies[opposing];
+  Bitboard *occupancies_all = &board->occupancies[ALL];
+
+  /************************
+   *   MOVING THE PIECE   *
+   ************************/
+  Bitboard move_bb = dst_bb | src_bb;
+  *occupancies_opposing ^= move_bb;
+
+  /************************
+   *       CAPTURES       *
+   ************************/
+  if (captured != PIECE_NONE) {
+    board->bitboards[turn][piece_type(captured)] |= dst_bb;
+    *occupancies_turn |= dst_bb;
+    *occupancies_all |= src_bb;
+    board->pieces[dst] = captured;
+  } else {
+    *occupancies_all ^= move_bb;
+    board->pieces[dst] = PIECE_NONE;
+  }
+
+  /************************
+   *     SPECIAL MOVES    *
+   ************************/
+  if (is_promotion(type)) {
+    board->bitboards[opposing][type-MOVE_PROMO_N + KNIGHT] ^= dst_bb;
+    board->bitboards[opposing][PAWN] |= src_bb;
+    board->pieces[src] = new_piece(opposing, PAWN);
+  } else {
+    board->bitboards[opposing][src_type] ^= move_bb;
+    board->pieces[src] = piece;
+  }
+
+  if (is_castle(type)) {
+    uint8_t castle_idx = type-MOVE_CASTLE_WK;
+
+    Bitboard rook_move_bb = CASTLE_BB[castle_idx];
+    board->bitboards[opposing][ROOK] ^= rook_move_bb;
+    *occupancies_opposing ^= rook_move_bb;
+    *occupancies_all ^= rook_move_bb;
+
+    RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
+    board->pieces[rook_move.dst] = PIECE_NONE;
+    board->pieces[rook_move.src] = new_piece(opposing, ROOK);
+  } else if (is_ep(type)) {
+    Square ep_piece = dst + (turn == WHITE ? +8 : -8);
+    Bitboard ep_bb = new_bitboard(ep_piece);
+    board->bitboards[turn][PAWN] |= ep_bb;
+    *occupancies_turn |= ep_bb;
+    *occupancies_all |= ep_bb;
+    board->pieces[ep_piece] = new_piece(turn, PAWN);
+  }
+
+  /************************
+   *  UPDATING BOARD INFO *
+   ************************/
+  board->turn = opposing;
+  board->rights = state.rights;
+  board->ep_square = state.ep_square;
+  board->halfmove_clk = state.halfmove_clk;
+  if (turn == WHITE) board->fullmove_no--;
 }
 
 void print_board(const Board *board, FILE *stream) {
