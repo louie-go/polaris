@@ -142,7 +142,7 @@ void make_move(Board *board, Move move) {
   board->turn = opposing;
 
   if (type == MOVE_DOUBLE_PUSH)
-    board->ep_square = src + south_turn;
+    board->ep_square = dst + south_turn;
   else board->ep_square = SQUARE_NONE;
 
   if (turn == BLACK) board->fullmove_no++;
