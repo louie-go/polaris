@@ -27,8 +27,6 @@ enum { PIECE_NONE = -1,
   PIECE_LEN };
 
 static inline Piece new_piece(Color color, PieceType type) {
-  if (color == COLOR_NONE && type == PIECETYPE_NONE) return PIECE_NONE;
-
   assert(color > COLOR_NONE && color < COLOR_LEN);
   assert(type > PIECETYPE_NONE && type < PIECETYPE_LEN);
 
@@ -36,16 +34,12 @@ static inline Piece new_piece(Color color, PieceType type) {
 }
 
 static inline Color piece_color(Piece piece) {
-  if (piece == PIECE_NONE) return COLOR_NONE;
-
   assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
   return piece & 1;
 }
 
 static inline PieceType piece_type(Piece piece) {
-  if (piece == PIECE_NONE) return PIECETYPE_NONE;
-
   assert(piece > PIECE_NONE && piece < PIECE_LEN);
 
   return piece >> 1;
@@ -76,16 +70,12 @@ static inline Square new_square(File file, Rank rank) {
 }
 
 static inline File square_file(Square square) {
-  if (square == SQUARE_NONE) return FILE_NONE;
-
   assert(square > SQUARE_NONE && square < SQUARE_LEN);
 
   return square & 7;
 }
 
 static inline Rank square_rank(Square square) {
-  if (square == SQUARE_NONE) return RANK_NONE;
-
   assert(square > SQUARE_NONE && square < SQUARE_LEN);
 
   return square >> 3;
