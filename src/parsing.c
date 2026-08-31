@@ -50,8 +50,6 @@ Move parse_move(const char *move_str) {
 }
 
 void parse_fen(const char *fen, Board *board) {
-  board->ply = 0;
-
   /************************
    *        BOARD         *
    ************************/
@@ -124,4 +122,6 @@ void parse_fen(const char *fen, Board *board) {
     board->fullmove_no = board->fullmove_no*10 + (*fen-'0');
     fen++;
   }
+
+  board->ply = board->fullmove_no-1;
 }
