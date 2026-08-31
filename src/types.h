@@ -173,26 +173,22 @@ static inline Move set_move_type(MoveType type, Move move) {
   return move | type<<12;
 }
 
-static inline bool is_normal(Move move) {
-  return move_type(move) == MOVE_NORMAL;
+static inline bool is_normal(MoveType type) {
+  return type == MOVE_NORMAL;
 }
 
-static inline bool is_promotion(Move move) {
-  MoveType type = move_type(move);
-
+static inline bool is_promotion(MoveType type) {
   return type >= MOVE_PROMO_N && type <= MOVE_PROMO_Q;
 }
 
-static inline bool is_castle(Move move) {
-  MoveType type = move_type(move);
-
+static inline bool is_castle(MoveType type) {
   return type >= MOVE_CASTLE_WK && type <= MOVE_CASTLE_BQ;
 }
 
-static inline bool is_ep(Move move) {
-  return move_type(move) == MOVE_EP;
+static inline bool is_ep(MoveType type) {
+  return type == MOVE_EP;
 }
 
-static inline bool is_double_push(Move move) {
-  return move_type(move) == MOVE_DOUBLE_PUSH;
+static inline bool is_double_push(MoveType type) {
+  return type == MOVE_DOUBLE_PUSH;
 }
