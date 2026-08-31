@@ -43,7 +43,10 @@ Move parse_move(const char *move_str) {
   Move move = new_move(src, dst, MOVE_NORMAL);
 
   char promo_char = move_str[4];
-  if (promo_char == '\0')
+  if (promo_char != 'n'
+      && promo_char != 'b'
+      && promo_char != 'r'
+      && promo_char != 'q')
     return move;
 
   return set_move_type(parse_piecetype(promo_char)+MOVE_PROMO_N - KNIGHT, move);

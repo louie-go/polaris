@@ -51,6 +51,7 @@ char *format_move(Move move, char *buffer) {
   if (is_promotion(move))
     *buffer++ = format_piecetype(type-MOVE_PROMO_N + KNIGHT);
 
+  *buffer = '\0';
   return buffer;
 }
 
