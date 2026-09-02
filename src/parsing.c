@@ -56,33 +56,36 @@ void parse_fen(const char *fen, Board *board) {
   /************************
    *        BOARD         *
    ************************/
-  board->occupancies[ALL] = 0;
-  for (Color color = COLOR_NONE+1; color < COLOR_LEN; color++) {
-    board->occupancies[color] = 0;
-    for (PieceType type = PIECETYPE_NONE+1; type < PIECETYPE_LEN; type++)
-      board->bitboards[color][type] = 0;
-  }
+  Bitboard *all_bb = &board->color_bb[ALL];
+
+  *all_bb = 0;
+  for (Color color = COLOR_NONE+1; color < COLOR_LEN; color++)
+    board->color_bb[color] = 0;
+  for (PieceType type = PIECETYPE_NONE+1; type < PIECETYPE_LEN; type++)
+    board->type_bb[type] = 0;
+
   File file = FILE_NONE+1; Rank rank = RANK_LEN-1;
   for (; *fen != ' '; fen++, file++) {
+    char fen_char = *fen;
     Square square = new_square(file, rank);
-    if (*fen == 'P' || *fen == 'N' || *fen == 'B' || *fen == 'R' || *fen == 'Q' || *fen == 'K' ||
-        *fen == 'p' || *fen == 'n' || *fen == 'b' || *fen == 'r' || *fen == 'q' || *fen == 'k') { 
-      Piece piece = parse_piece(*fen);
-      Color color = piece_color(piece);
+
+    if (fen_char >= '1' && fen_char <= '8') {
+      for (Square empty = square; empty < square+(fen_char-'0'); empty++)
+        board->pieces[empty] = PIECE_NONE;
+      file += fen_char-'1';
+    } else if (fen_char == '/') {
+      file = FILE_NONE; rank--;
+    } else {
+      Piece piece = parse_piece(fen_char);
       Bitboard sq_bb = new_bitboard(square);
 
-      board->bitboards[color][piece_type(piece)] |= sq_bb;
-      board->occupancies[color] |= sq_bb;
-      board->occupancies[ALL] |= sq_bb;
+      *all_bb |= sq_bb;
+      board->color_bb[piece_color(piece)] |= sq_bb;
+      board->type_bb[piece_type(piece)] |= sq_bb;
       board->pieces[square] = piece;
-    } else if (*fen >= '1' && *fen <= '8') {
-      for (Square empty = square; empty < square+(*fen-'0'); empty++)
-        board->pieces[empty] = PIECE_NONE;
-      file += *fen-'1';
-    } else if (*fen == '/') {
-      file = FILE_NONE; rank--;
-    } else assert(0);
+    }
   }
+
   assert(file == FILE_LEN);
   assert(rank == RANK_NONE+1);
 

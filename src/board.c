@@ -8,7 +8,6 @@
 #include "formatting.h"
 #include "parsing.h"
 #include "types.h"
-#include "zobrist.h"
 
 static const CastleRights RIGHTS_LOST[SQUARE_LEN] = {
   [E1] = CASTLE_WHITE,
@@ -26,11 +25,9 @@ static const Bitboard CASTLE_BB[CASTLE_LEN] = {
   0x0900000000000000ULL,
 };
 
-typedef struct {
+static const struct RookCastleMove {
   Square src, dst;
-} RookCastleMove;
-
-static const RookCastleMove ROOK_CASTLE_MOVES[CASTLE_LEN] = {
+} ROOK_CASTLE_MOVES[CASTLE_LEN] = {
   {H1, F1},
   {A1, D1},
   {H8, F8},
@@ -52,9 +49,10 @@ void make_move(Board *board, Move move) {
   Color opposing = opposite(turn);
 
   CastleRights *rights = &board->rights;
-  Bitboard *occupancies_turn = &board->occupancies[turn];
-  Bitboard *occupancies_opposing = &board->occupancies[opposing];
-  Bitboard *occupancies_all = &board->occupancies[ALL];
+  Bitboard *all_bb = &board->color_bb[ALL];
+  Bitboard *turn_bb = &board->color_bb[turn];
+  Bitboard *opposing_bb = &board->color_bb[opposing];
+  Bitboard *src_type_bb = &board->type_bb[src_type];
 
   /************************
    *UPDATING CURRENT STATE*
@@ -71,7 +69,7 @@ void make_move(Board *board, Move move) {
    *   MOVING THE PIECE   *
    ************************/
   Bitboard move_bb = src_bb | dst_bb;
-  *occupancies_turn ^= move_bb;
+  *turn_bb ^= move_bb;
   board->pieces[src] = PIECE_NONE;
 
   MoveType type = move_type(move);
@@ -82,9 +80,9 @@ void make_move(Board *board, Move move) {
   if (captured != PIECE_NONE) {
     PieceType captured_type = piece_type(captured);
 
-    board->bitboards[opposing][captured_type] ^= dst_bb;
-    *occupancies_opposing ^= dst_bb;
-    *occupancies_all ^= src_bb;
+    *all_bb ^= src_bb;
+    *opposing_bb ^= dst_bb;
+    board->type_bb[captured_type] ^= dst_bb;
 
     if (captured_type == ROOK)
       *rights &= ~RIGHTS_LOST[dst];
@@ -94,7 +92,7 @@ void make_move(Board *board, Move move) {
   } else {
     if (src_type != PAWN) board->halfmove_clk++;
     else board->halfmove_clk = 0;
-    *occupancies_all ^= move_bb;
+    *all_bb ^= move_bb;
   }
 
   /************************
@@ -107,11 +105,11 @@ void make_move(Board *board, Move move) {
 
   if (is_promotion(type)) {
     PieceType promo_type = type-MOVE_PROMO_N + KNIGHT;
-    board->bitboards[turn][PAWN] ^= src_bb;
-    board->bitboards[turn][promo_type] |= dst_bb;
+    *src_type_bb ^= src_bb;
+    board->type_bb[promo_type] |= dst_bb;
     board->pieces[dst] = new_piece(turn, promo_type);
   } else {
-    board->bitboards[turn][src_type] ^= move_bb;
+    *src_type_bb ^= move_bb;
     board->pieces[dst] = piece;
   }
 
@@ -119,19 +117,19 @@ void make_move(Board *board, Move move) {
     uint8_t castle_idx = type-MOVE_CASTLE_WK;
 
     Bitboard rook_move_bb = CASTLE_BB[castle_idx];
-    board->bitboards[turn][ROOK] ^= rook_move_bb;
-    *occupancies_turn ^= rook_move_bb;
-    *occupancies_all ^= rook_move_bb;
+    *all_bb  ^= rook_move_bb;
+    *turn_bb ^= rook_move_bb;
+    board->type_bb[ROOK] ^= rook_move_bb;
 
-    RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
+    struct RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
     board->pieces[rook_move.src] = PIECE_NONE;
     board->pieces[rook_move.dst] = new_piece(turn, ROOK);
   } else if (is_ep(type)) {
     Square ep_piece = board->ep_square + south_turn;
     Bitboard ep_bb = new_bitboard(ep_piece);
-    board->bitboards[opposing][PAWN] ^= ep_bb;
-    *occupancies_opposing ^= ep_bb;
-    *occupancies_all ^= ep_bb;
+    *all_bb ^= ep_bb;
+    *opposing_bb ^= ep_bb;
+    *src_type_bb ^= ep_bb;
     board->pieces[ep_piece] = PIECE_NONE;
   }
 
@@ -161,31 +159,32 @@ void undo_move(Board *board) {
 
   Piece piece = board->pieces[dst];
   Color turn = board->turn;
-  PieceType src_type = piece_type(piece);
+  PieceType dst_type = piece_type(piece);
 
   Piece captured = state.captured;
   Color opposing = opposite(turn);
 
-  Bitboard *occupancies_turn = &board->occupancies[turn];
-  Bitboard *occupancies_opposing = &board->occupancies[opposing];
-  Bitboard *occupancies_all = &board->occupancies[ALL];
+  Bitboard *all_bb = &board->color_bb[ALL];
+  Bitboard *turn_bb = &board->color_bb[turn];
+  Bitboard *opposing_bb = &board->color_bb[opposing];
+  Bitboard *dst_type_bb = &board->type_bb[dst_type];
 
   /************************
    *   MOVING THE PIECE   *
    ************************/
   Bitboard move_bb = dst_bb | src_bb;
-  *occupancies_opposing ^= move_bb;
+  *opposing_bb ^= move_bb;
 
   /************************
    *       CAPTURES       *
    ************************/
   if (captured != PIECE_NONE) {
-    board->bitboards[turn][piece_type(captured)] |= dst_bb;
-    *occupancies_turn |= dst_bb;
-    *occupancies_all |= src_bb;
+    *all_bb |= src_bb;
+    *turn_bb |= dst_bb;
+    board->type_bb[piece_type(captured)] |= dst_bb;
     board->pieces[dst] = captured;
   } else {
-    *occupancies_all ^= move_bb;
+    *all_bb ^= move_bb;
     board->pieces[dst] = PIECE_NONE;
   }
 
@@ -193,11 +192,11 @@ void undo_move(Board *board) {
    *     SPECIAL MOVES    *
    ************************/
   if (is_promotion(type)) {
-    board->bitboards[opposing][type-MOVE_PROMO_N + KNIGHT] ^= dst_bb;
-    board->bitboards[opposing][PAWN] |= src_bb;
+    *dst_type_bb ^= dst_bb;
+    board->type_bb[PAWN] |= src_bb;
     board->pieces[src] = new_piece(opposing, PAWN);
   } else {
-    board->bitboards[opposing][src_type] ^= move_bb;
+    *dst_type_bb ^= move_bb;
     board->pieces[src] = piece;
   }
 
@@ -205,19 +204,19 @@ void undo_move(Board *board) {
     uint8_t castle_idx = type-MOVE_CASTLE_WK;
 
     Bitboard rook_move_bb = CASTLE_BB[castle_idx];
-    board->bitboards[opposing][ROOK] ^= rook_move_bb;
-    *occupancies_opposing ^= rook_move_bb;
-    *occupancies_all ^= rook_move_bb;
+    *all_bb ^= rook_move_bb;
+    *opposing_bb ^= rook_move_bb;
+    board->type_bb[ROOK] ^= rook_move_bb;
 
-    RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
+    struct RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
     board->pieces[rook_move.dst] = PIECE_NONE;
     board->pieces[rook_move.src] = new_piece(opposing, ROOK);
   } else if (is_ep(type)) {
     Square ep_piece = dst + (turn == WHITE ? +8 : -8);
     Bitboard ep_bb = new_bitboard(ep_piece);
-    board->bitboards[turn][PAWN] |= ep_bb;
-    *occupancies_turn |= ep_bb;
-    *occupancies_all |= ep_bb;
+    *all_bb |= ep_bb;
+    *turn_bb |= ep_bb;
+    *dst_type_bb |= ep_bb;
     board->pieces[ep_piece] = new_piece(turn, PAWN);
   }
 
@@ -252,6 +251,8 @@ void print_board(const Board *board, FILE *stream) {
   char fen[FEN_BUFFER_MAX];
   format_fen(board, fen);
 
-  fprintf(stream, "\nfen %s zobrist 0x%016" PRIX64 "\n", fen, hash_board(board));
+  fputc('\n', stdout);
+  fputs(fen, stdout);
+  fputc('\n', stdout);
 #endif
 }

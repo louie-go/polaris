@@ -17,10 +17,11 @@ typedef struct {
 
 typedef struct {
   State        states[MAX_GAME_PLY];
-  Bitboard     bitboards[COLOR_LEN][PIECETYPE_LEN];
   Piece        pieces[SQUARE_LEN];
+  Bitboard     type_bb[PIECETYPE_LEN];
   // +1 for `ALL` (check `types.h`)
-  Bitboard     occupancies[COLOR_LEN+1];
+  Bitboard     color_bb[COLOR_LEN+1];
+  uint64_t     hash;
   uint16_t     ply;
   uint16_t     fullmove_no;
   uint8_t      halfmove_clk;
@@ -28,6 +29,10 @@ typedef struct {
   CastleRights rights;
   Square       ep_square;
 } Board;
+
+static inline Bitboard pieces(const Board *board, Color color, PieceType type) {
+  return board->color_bb[color] & board->type_bb[type];
+}
 
 void make_move(Board *board, Move move);
 void undo_move(Board *board);
