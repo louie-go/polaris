@@ -177,7 +177,3 @@ static inline bool is_castle(MoveType type) {
 static inline bool is_ep(MoveType type) {
   return type == MOVE_EP;
 }
-
-static inline bool is_double_push(MoveType type) {
-  return type == MOVE_DOUBLE_PUSH;
-}

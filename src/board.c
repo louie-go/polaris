@@ -183,6 +183,7 @@ void undo_move(Board *board) {
     *all_bb |= src_bb;
     *turn_bb |= dst_bb;
     board->type_bb[piece_type(captured)] ^= dst_bb;
+    board->pieces[dst] = captured;
   } else {
     *all_bb ^= move_bb;
     board->pieces[dst] = PIECE_NONE;
