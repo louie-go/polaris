@@ -117,7 +117,6 @@ enum {
   MOVE_CASTLE_BK,
   MOVE_CASTLE_BQ,
   MOVE_EP,
-  MOVE_DOUBLE_PUSH,
 };
 
 // bits 1-6:   source square

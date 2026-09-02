@@ -1,6 +1,7 @@
 #include "board.h"
 
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <inttypes.h>
 
@@ -138,7 +139,7 @@ void make_move(Board *board, Move move) {
    ************************/
   board->turn = opposing;
 
-  if (type == MOVE_DOUBLE_PUSH)
+  if (src_type == PAWN && abs(src-dst) == 16)
     board->ep_square = dst + south_turn;
   else board->ep_square = SQUARE_NONE;
 
@@ -181,8 +182,7 @@ void undo_move(Board *board) {
   if (captured != PIECE_NONE) {
     *all_bb |= src_bb;
     *turn_bb |= dst_bb;
-    board->type_bb[piece_type(captured)] |= dst_bb;
-    board->pieces[dst] = captured;
+    board->type_bb[piece_type(captured)] ^= dst_bb;
   } else {
     *all_bb ^= move_bb;
     board->pieces[dst] = PIECE_NONE;
