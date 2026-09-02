@@ -139,7 +139,7 @@ void make_move(Board *board, Move move) {
    ************************/
   board->turn = opposing;
 
-  if (src_type == PAWN && abs(dst-src) == 16)
+  if (is_double_push(type))
     board->ep_square = dst + south_turn;
   else board->ep_square = SQUARE_NONE;
 

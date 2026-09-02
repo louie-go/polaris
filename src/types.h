@@ -104,9 +104,9 @@ static inline CastleRights castle_color(Color color) {
   return CASTLE_WHITE << (color<<1);
 }
 
-// no reason to add a `MOVE_NONE` or `MOVE_LEN`
-typedef uint8_t MoveType;
+typedef int8_t MoveType;
 enum {
+  MOVE_NONE = -1,
   MOVE_NORMAL,
   MOVE_PROMO_N,
   MOVE_PROMO_B,
@@ -116,7 +116,9 @@ enum {
   MOVE_CASTLE_WQ,
   MOVE_CASTLE_BK,
   MOVE_CASTLE_BQ,
+  MOVE_DOUBLE_PUSH,
   MOVE_EP,
+  MOVE_LEN,
 };
 
 // bits 1-6:   source square
@@ -127,7 +129,7 @@ typedef uint16_t Move;
 static inline Move new_move(Square src, Square dst, MoveType type) {
   assert(src > SQUARE_NONE && src < SQUARE_LEN);
   assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
-  assert(type >= MOVE_NORMAL && type <= MOVE_EP);
+  assert(type > MOVE_NONE && type < MOVE_LEN);
 
   return src | dst<<6 | type<<12;
 }
@@ -176,4 +178,8 @@ static inline bool is_castle(MoveType type) {
 
 static inline bool is_ep(MoveType type) {
   return type == MOVE_EP;
+}
+
+static inline bool is_double_push(MoveType type) {
+  return type == MOVE_DOUBLE_PUSH;
 }
