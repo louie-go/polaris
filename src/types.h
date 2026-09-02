@@ -16,6 +16,10 @@ static inline Color opposite(Color color) {
 typedef int8_t PieceType;
 enum { PIECETYPE_NONE = -1, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, PIECETYPE_LEN };
 
+static inline bool is_slider(PieceType type) {
+  return type == BISHOP || type == ROOK || type == QUEEN;
+}
+
 typedef int8_t Piece;
 enum { PIECE_NONE = -1,
   WHITE_PAWN,   BLACK_PAWN,
