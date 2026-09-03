@@ -130,6 +130,8 @@ enum {
 // bits 13-16: move type
 typedef uint16_t Move;
 
+#define MOVE_SQUARE_NONE 0
+
 static inline Move new_move(Square src, Square dst, MoveType type) {
   assert(src > SQUARE_NONE && src < SQUARE_LEN);
   assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
