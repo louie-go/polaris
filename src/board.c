@@ -280,7 +280,7 @@ void print_board(const Board *board, FILE *stream) {
   fputs("  a b c d e f g h\n", stream);
 
 #ifndef NDEBUG
-  char fen[FEN_BUFFER_MAX];
+  char fen[MAX_FEN_BUFFER];
   format_fen(board, fen);
 
   fputc('\n', stdout);
