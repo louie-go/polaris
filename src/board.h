@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "types.h"
@@ -34,6 +35,22 @@ typedef struct {
 
 static inline Bitboard pieces(const Board *board, Color color, PieceType type) {
   return board->color_bb[color] & board->type_bb[type];
+}
+
+static inline bool can_castle_kingside(const Board *board) {
+  if (board->turn == WHITE) {
+    return board->rights&CASTLE_WK > 0;
+  } else {
+    return board->rights&CASTLE_BK > 0;
+  }
+}
+
+static inline bool can_castle_queenside(const Board *board) {
+  if (board->turn == WHITE) {
+    return board->rights&CASTLE_WQ > 0;
+  } else {
+    return board->rights&CASTLE_BQ > 0;
+  }
 }
 
 void init_zobrist(uint64_t seed);
