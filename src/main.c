@@ -17,7 +17,7 @@ int main(void) {
   Move moves[MAX_MOVES];
   Move *moves_end = legal_moves(board, moves);
 
-  char move_str[6];
+  char move_str[MAX_MOVE_BUFFER];
   Move *move = moves;
   while (move++ != moves_end) {
     format_move(*move, move_str);
