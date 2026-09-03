@@ -49,7 +49,7 @@ Move parse_move(const char *move_str) {
       && promo_char != 'q')
     return move;
 
-  return set_move_type(parse_piecetype(promo_char)+MOVE_PROMO_N - KNIGHT, move);
+  return set_move_type(parse_piecetype(promo_char)+MOVE_PROMO_N - KNIGHT, &move);
 }
 
 void parse_fen(const char *fen, Board *board) {

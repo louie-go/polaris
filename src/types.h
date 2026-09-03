@@ -150,22 +150,25 @@ static inline MoveType move_type(Move move) {
   return move >> 12;
 }
 
-static inline Move set_move_src(Square src, Move move) {
+static inline Move set_move_src(Square src, Move *move) {
   assert(src > SQUARE_NONE && src < SQUARE_LEN);
 
-  return move | src;
+  *move = *move | src;
+  return *move;
 }
 
-static inline Move set_move_dst(Square dst, Move move) {
+static inline Move set_move_dst(Square dst, Move *move) {
   assert(dst > SQUARE_NONE && dst < SQUARE_LEN);
 
-  return move | dst<<6;
+  *move |= dst<<6;
+  return *move;
 }
 
-static inline Move set_move_type(MoveType type, Move move) {
+static inline Move set_move_type(MoveType type, Move *move) {
   assert(type >= MOVE_NORMAL && type <= MOVE_EP);
 
-  return move | type<<12;
+  *move |= type<<12;
+  return *move;
 }
 
 static inline bool is_normal(MoveType type) {
