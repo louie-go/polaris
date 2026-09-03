@@ -25,4 +25,5 @@ int main(void) {
   }
 
   free(board);
+  return 0;
 }
