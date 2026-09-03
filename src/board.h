@@ -7,6 +7,8 @@
 
 #define MAX_GAME_PLY 17697
 
+typedef uint64_t Zobrist;
+
 typedef struct {
   Move         move;
   CastleRights rights;
@@ -21,7 +23,7 @@ typedef struct {
   Bitboard     type_bb[PIECETYPE_LEN];
   // +1 for `ALL` (check `types.h`)
   Bitboard     color_bb[COLOR_LEN+1];
-  uint64_t     hash;
+  Zobrist      hash;
   uint16_t     ply;
   uint16_t     fullmove_no;
   uint8_t      halfmove_clk;
@@ -34,6 +36,9 @@ static inline Bitboard pieces(const Board *board, Color color, PieceType type) {
   return board->color_bb[color] & board->type_bb[type];
 }
 
+void init_zobrist(uint64_t seed);
+
 void make_move(Board *board, Move move);
 void undo_move(Board *board);
+
 void print_board(const Board *board, FILE *stream);

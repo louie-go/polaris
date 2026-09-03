@@ -10,6 +10,37 @@
 #include "parsing.h"
 #include "types.h"
 
+static Zobrist board_hashes[PIECE_LEN][SQUARE_LEN];
+static Zobrist turn_hash;
+static Zobrist castle_hashes[CASTLE_LEN];
+static Zobrist ep_hashes[FILE_LEN];
+
+static uint64_t state;
+static inline uint64_t rand64(void) {
+  state ^= state >> 12;
+  state ^= state << 25;
+  state ^= state >> 27;
+  return state * 0x2545F4914F6CDD1DULL;
+}
+
+void init_zobrist(uint64_t seed) {
+  state = seed ? seed : 0x9E3779B97F4A7C15ULL;
+
+  for (Piece piece = PIECE_NONE+1; piece < PIECE_LEN; piece++)
+    for (Square square = SQUARE_NONE+1; square < SQUARE_LEN; square++)
+      board_hashes[piece][square] = rand64();
+
+  // "One number to indicate the side to move is black"
+  // - https://chessprogramming.org/Zobrist_Hashing#initialization
+  turn_hash = rand64();
+
+  for (uint8_t right = 0; right < CASTLE_LEN; right++)
+    castle_hashes[right] = rand64();
+
+  for (File file = FILE_NONE+1; file < FILE_LEN; file++)
+    ep_hashes[file] = rand64();
+}
+
 static const CastleRights RIGHTS_LOST[SQUARE_LEN] = {
   [E1] = CASTLE_WHITE,
   [A1] = CASTLE_WQ,
