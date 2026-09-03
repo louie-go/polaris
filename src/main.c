@@ -10,10 +10,19 @@
 
 int main(void) {
   Board *board = malloc(sizeof(*board));
-  parse_fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", board);
+  parse_fen("4k3/8/2B5/8/8/8/8/4R1K1 b - - 0 1", board);
 
   print_board(board, stdout);
 
+  Move moves[MAX_MOVES];
+  Move *moves_end = legal_moves(board, moves);
+
+  char move_str[6];
+  Move *move = moves;
+  while (move++ != moves_end) {
+    format_move(*move, move_str);
+    puts(move_str);
+  }
+
   free(board);
-  return 0;
 }
