@@ -153,9 +153,9 @@ void make_move(Board *board, Move move) {
     *turn_bb ^= rook_move_bb;
     board->type_bb[ROOK] ^= rook_move_bb;
 
-    struct RookCastleMove rook_move = ROOK_CASTLE_MOVES[castle_idx];
-    board->pieces[rook_move.src] = PIECE_NONE;
-    board->pieces[rook_move.dst] = new_piece(turn, ROOK);
+    const struct RookCastleMove *rook_move = &ROOK_CASTLE_MOVES[castle_idx];
+    board->pieces[rook_move->src] = PIECE_NONE;
+    board->pieces[rook_move->dst] = new_piece(turn, ROOK);
   } else if (is_ep(type)) {
     Square ep_piece = board->ep_square + south_turn;
     Bitboard ep_bb = new_bitboard(ep_piece);
