@@ -10,7 +10,7 @@
 
 int main(void) {
   Board *board = malloc(sizeof(*board));
-  parse_fen("4k3/8/2B5/8/8/8/8/4R1K1 b - - 0 1", board);
+  parse_fen(STARTING_POSITION, board);
 
   print_board(board, stdout);
 

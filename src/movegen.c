@@ -10,8 +10,8 @@
 #include "types.h"
 
 static const Bitboard pawn_attacks[COLOR_LEN][SQUARE_LEN] = {
-  {0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000020000ULL,0x0000000000050000ULL,0x00000000000A0000ULL,0x0000000000140000ULL,0x0000000000280000ULL,0x0000000000500000ULL,0x0000000000A00000ULL,0x0000000000400000ULL,0x0000000002000000ULL,0x0000000005000000ULL,0x000000000A000000ULL,0x0000000014000000ULL,0x0000000028000000ULL,0x0000000050000000ULL,0x00000000A0000000ULL,0x0000000040000000ULL,0x0000000200000000ULL,0x0000000500000000ULL,0x0000000A00000000ULL,0x0000001400000000ULL,0x0000002800000000ULL,0x0000005000000000ULL,0x000000A000000000ULL,0x0000004000000000ULL,0x0000020000000000ULL,0x0000050000000000ULL,0x00000A0000000000ULL,0x0000140000000000ULL,0x0000280000000000ULL,0x0000500000000000ULL,0x0000A00000000000ULL,0x0000400000000000ULL,0x0002000000000000ULL,0x0005000000000000ULL,0x000A000000000000ULL,0x0014000000000000ULL,0x0028000000000000ULL,0x0050000000000000ULL,0x00A0000000000000ULL,0x0040000000000000ULL,0x0200000000000000ULL,0x0500000000000000ULL,0x0A00000000000000ULL,0x1400000000000000ULL,0x2800000000000000ULL,0x5000000000000000ULL,0xA000000000000000ULL,0x4000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL},
-  {0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000002ULL,0x0000000000000005ULL,0x000000000000000AULL,0x0000000000000014ULL,0x0000000000000028ULL,0x0000000000000050ULL,0x00000000000000A0ULL,0x0000000000000040ULL,0x0000000000000200ULL,0x0000000000000500ULL,0x0000000000000A00ULL,0x0000000000001400ULL,0x0000000000002800ULL,0x0000000000005000ULL,0x000000000000A000ULL,0x0000000000004000ULL,0x0000000000020000ULL,0x0000000000050000ULL,0x00000000000A0000ULL,0x0000000000140000ULL,0x0000000000280000ULL,0x0000000000500000ULL,0x0000000000A00000ULL,0x0000000000400000ULL,0x0000000002000000ULL,0x0000000005000000ULL,0x000000000A000000ULL,0x0000000014000000ULL,0x0000000028000000ULL,0x0000000050000000ULL,0x00000000A0000000ULL,0x0000000040000000ULL,0x0000000200000000ULL,0x0000000500000000ULL,0x0000000A00000000ULL,0x0000001400000000ULL,0x0000002800000000ULL,0x0000005000000000ULL,0x000000A000000000ULL,0x0000004000000000ULL,0x0000020000000000ULL,0x0000050000000000ULL,0x00000A0000000000ULL,0x0000140000000000ULL,0x0000280000000000ULL,0x0000500000000000ULL,0x0000A00000000000ULL,0x0000400000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL},
+  {0x0000000000000200ULL,0x0000000000000500ULL,0x0000000000000A00ULL,0x0000000000001400ULL,0x0000000000002800ULL,0x0000000000005000ULL,0x000000000000A000ULL,0x0000000000004000ULL,0x0000000000020000ULL,0x0000000000050000ULL,0x00000000000A0000ULL,0x0000000000140000ULL,0x0000000000280000ULL,0x0000000000500000ULL,0x0000000000A00000ULL,0x0000000000400000ULL,0x0000000002000000ULL,0x0000000005000000ULL,0x000000000A000000ULL,0x0000000014000000ULL,0x0000000028000000ULL,0x0000000050000000ULL,0x00000000A0000000ULL,0x0000000040000000ULL,0x0000000200000000ULL,0x0000000500000000ULL,0x0000000A00000000ULL,0x0000001400000000ULL,0x0000002800000000ULL,0x0000005000000000ULL,0x000000A000000000ULL,0x0000004000000000ULL,0x0000020000000000ULL,0x0000050000000000ULL,0x00000A0000000000ULL,0x0000140000000000ULL,0x0000280000000000ULL,0x0000500000000000ULL,0x0000A00000000000ULL,0x0000400000000000ULL,0x0002000000000000ULL,0x0005000000000000ULL,0x000A000000000000ULL,0x0014000000000000ULL,0x0028000000000000ULL,0x0050000000000000ULL,0x00A0000000000000ULL,0x0040000000000000ULL,0x0200000000000000ULL,0x0500000000000000ULL,0x0A00000000000000ULL,0x1400000000000000ULL,0x2800000000000000ULL,0x5000000000000000ULL,0xA000000000000000ULL,0x4000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL},
+  {0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000000ULL,0x0000000000000002ULL,0x0000000000000005ULL,0x000000000000000AULL,0x0000000000000014ULL,0x0000000000000028ULL,0x0000000000000050ULL,0x00000000000000A0ULL,0x0000000000000040ULL,0x0000000000000200ULL,0x0000000000000500ULL,0x0000000000000A00ULL,0x0000000000001400ULL,0x0000000000002800ULL,0x0000000000005000ULL,0x000000000000A000ULL,0x0000000000004000ULL,0x0000000000020000ULL,0x0000000000050000ULL,0x00000000000A0000ULL,0x0000000000140000ULL,0x0000000000280000ULL,0x0000000000500000ULL,0x0000000000A00000ULL,0x0000000000400000ULL,0x0000000002000000ULL,0x0000000005000000ULL,0x000000000A000000ULL,0x0000000014000000ULL,0x0000000028000000ULL,0x0000000050000000ULL,0x00000000A0000000ULL,0x0000000040000000ULL,0x0000000200000000ULL,0x0000000500000000ULL,0x0000000A00000000ULL,0x0000001400000000ULL,0x0000002800000000ULL,0x0000005000000000ULL,0x000000A000000000ULL,0x0000004000000000ULL,0x0000020000000000ULL,0x0000050000000000ULL,0x00000A0000000000ULL,0x0000140000000000ULL,0x0000280000000000ULL,0x0000500000000000ULL,0x0000A00000000000ULL,0x0000400000000000ULL,0x0002000000000000ULL,0x0005000000000000ULL,0x000A000000000000ULL,0x0014000000000000ULL,0x0028000000000000ULL,0x0050000000000000ULL,0x00A0000000000000ULL,0x0040000000000000ULL},
 };
 
 static const Bitboard knight_attacks[SQUARE_LEN] = {
@@ -636,21 +636,35 @@ static inline Bitboard rook_attacks(Square src, Bitboard blockers) {
 }
 
 static const struct KingCastleMove {
-  Bitboard safe;
+  Bitboard emptymask, safemask;
   Square src, dst;
 } KING_CASTLE_MOVES[CASTLE_LEN] = {
-  {0x0000000000000060, E1, G1},
-  {0x000000000000000E, E1, C1},
-  {0x6000000000000000, E8, G8},
-  {0x0E00000000000000, E8, C8},
+  {0x0000000000000060, 0x0000000000000060, E1, G1},
+  {0x000000000000000E, 0x000000000000000C, E1, C1},
+  {0x6000000000000000, 0x6000000000000000, E8, G8},
+  {0x0E00000000000000, 0x0C00000000000000, E8, C8},
 };
+
+static inline Bitboard full_line_bb(Square square, bool diagonal) {
+  Bitboard line = 0;
+  int d1 = (int)square_file(square) - (int)square_rank(square);
+  int d2 = (int)square_file(square) + (int)square_rank(square);
+  if (!diagonal)
+    line = bitboard_rank(square_rank(square)) | bitboard_file(square_file(square));
+  else
+    for (Rank r = 0; r < RANK_LEN; r++)
+      for (File f = 0; f < FILE_LEN; f++)
+        if ((int)f - (int)r == d1 || (int)f + (int)r == d2)
+          line |= new_bitboard(new_square(f, r));
+  return line & ~new_bitboard(square);
+}
 
 Move *legal_moves(const Board *board, Move *moves) {
   Color turn     = board->turn;
   Color opposing = opposite(turn);
 
   Bitboard queens  = pieces(board, turn, QUEEN);
-  // Bitboard pawns   = pieces(board, turn, PAWN);
+  Bitboard pawns   = pieces(board, turn, PAWN);
   Bitboard knights = pieces(board, turn, KNIGHT);
   Bitboard diags   = pieces(board, turn, BISHOP) | queens;
   Bitboard orthos  = pieces(board, turn, ROOK) | queens;
@@ -658,7 +672,7 @@ Move *legal_moves(const Board *board, Move *moves) {
   Bitboard king    = lsb(king_bb);
 
   Bitboard all_bb      = board->color_bb[ALL];
-  // Bitboard empty       = ~all_bb;
+  Bitboard empty       = ~all_bb;
   Bitboard turn_bb     = board->color_bb[turn];
   Bitboard not_turn_bb = ~turn_bb;
 
@@ -672,6 +686,7 @@ Move *legal_moves(const Board *board, Move *moves) {
   Bitboard opposing_orthos  = pieces(board, opposing, ROOK) | opposing_queens;
   Bitboard opposing_king    = lsb(pieces(board, opposing, KING));
   Bitboard wo_king          = all_bb ^ king_bb;
+  Bitboard capturable_bb    = not_turn_bb & ~new_bitboard(opposing_king);
 
   Bitboard king_dangers = 0;
 
@@ -690,7 +705,7 @@ Move *legal_moves(const Board *board, Move *moves) {
    ************************/
   Bitboard checkers = 0;
 
-  checkers |= pawn_attacks[opposing][king]
+  checkers |= pawn_attacks[turn][king]
     & pieces(board, opposing, PAWN);
 
   checkers |= knight_attacks[king]
@@ -737,8 +752,8 @@ Move *legal_moves(const Board *board, Move *moves) {
       struct KingCastleMove move = KING_CASTLE_MOVES[side];
 
       // skip if squares are occupied or attacked
-      if (move.safe & (all_bb | king_dangers))
-        continue;
+      if (move.emptymask & all_bb) continue;
+      if (move.safemask & king_dangers) continue;
 
       *moves++ = new_move(move.src, move.dst, MOVE_CASTLE_WK+side);
     }
@@ -750,14 +765,15 @@ Move *legal_moves(const Board *board, Move *moves) {
    *         PINS         *
    ************************/
   Bitboard snipers =
-    (bishop_masks[king] & opposing_diags)
-    | (rook_masks[king] & opposing_orthos);
+    (full_line_bb(king, true) & opposing_diags)
+    | (full_line_bb(king, false) & opposing_orthos);
 
   Bitboard pinned = 0, pin_rays[SQUARE_LEN];
 
   while (snipers) {
-    Bitboard ray = between[king][pop_lsb(&snipers)];
-    Bitboard blockers = ray & all_bb;
+    Square sniper_sq = pop_lsb(&snipers);
+    Bitboard ray = between[king][sniper_sq];
+    Bitboard blockers = ray & all_bb & ~new_bitboard(sniper_sq);
 
     if (popcount(blockers) != 1) continue;
 
@@ -777,7 +793,7 @@ Move *legal_moves(const Board *board, Move *moves) {
     Square src = pop_lsb(&pinned_diags);
     Bitboard attacks = bishop_attacks(src, all_bb)
       & pin_rays[src]
-      & not_turn_bb
+      & capturable_bb
       & allowed_bb;
     while (attacks)
       *moves++ = new_move(src, pop_lsb(&attacks), MOVE_NORMAL);
@@ -787,7 +803,7 @@ Move *legal_moves(const Board *board, Move *moves) {
     Square src = pop_lsb(&pinned_orthos);
     Bitboard attacks = rook_attacks(src, all_bb)
       & pin_rays[src]
-      & not_turn_bb
+      & capturable_bb
       & allowed_bb;
     while (attacks)
       *moves++ = new_move(src, pop_lsb(&attacks), MOVE_NORMAL);
@@ -805,7 +821,7 @@ Move *legal_moves(const Board *board, Move *moves) {
   while (not_pinned_knights) {
     Square src = pop_lsb(&not_pinned_knights);
     Bitboard attacks = knight_attacks[src]
-      & not_turn_bb
+      & capturable_bb
       & allowed_bb;
     while (attacks)
       *moves++ = new_move(src, pop_lsb(&attacks), MOVE_NORMAL);
@@ -814,7 +830,7 @@ Move *legal_moves(const Board *board, Move *moves) {
   while (not_pinned_diags) {
     Square src = pop_lsb(&not_pinned_diags);
     Bitboard attacks = bishop_attacks(src, all_bb)
-      & not_turn_bb
+      & capturable_bb
       & allowed_bb;
     while (attacks)
       *moves++ = new_move(src, pop_lsb(&attacks), MOVE_NORMAL);
@@ -823,10 +839,186 @@ Move *legal_moves(const Board *board, Move *moves) {
   while (not_pinned_orthos) {
     Square src = pop_lsb(&not_pinned_orthos);
     Bitboard attacks = rook_attacks(src, all_bb)
-      & not_turn_bb
+      & capturable_bb
       & allowed_bb;
     while (attacks)
       *moves++ = new_move(src, pop_lsb(&attacks), MOVE_NORMAL);
+  }
+
+  /************************
+   *      PAWN MOVES      *
+   ************************/
+  Bitboard not_pinned_pawns = not_pinned & pawns;
+
+  Square promo_rank = turn == WHITE ? RANK_8 : RANK_1;
+
+  // Pushes
+  Bitboard single_push;
+  if (turn == WHITE)
+    single_push = (not_pinned_pawns << 8) & empty;
+  else
+    single_push = (not_pinned_pawns >> 8) & empty;
+
+  single_push &= allowed_bb;
+
+  Bitboard promotions = single_push & bitboard_rank(promo_rank);
+  single_push &= ~promotions;
+
+  while (single_push) {
+    Square dst = pop_lsb(&single_push);
+    Square src = dst + (turn == WHITE ? -8 : 8);
+    *moves++ = new_move(src, dst, MOVE_NORMAL);
+  }
+
+  while (promotions) {
+    Square dst = pop_lsb(&promotions);
+    Square src = dst + (turn == WHITE ? -8 : 8);
+    *moves++ = new_move(src, dst, MOVE_PROMO_N);
+    *moves++ = new_move(src, dst, MOVE_PROMO_B);
+    *moves++ = new_move(src, dst, MOVE_PROMO_R);
+    *moves++ = new_move(src, dst, MOVE_PROMO_Q);
+  }
+
+  // Double push
+  Bitboard double_push;
+  if (turn == WHITE) {
+    Bitboard mid = (not_pinned_pawns & bitboard_rank(RANK_2)) << 8;
+    mid &= empty;
+    double_push = (mid << 8) & empty & allowed_bb;
+  } else {
+    Bitboard mid = (not_pinned_pawns & bitboard_rank(RANK_7)) >> 8;
+    mid &= empty;
+    double_push = (mid >> 8) & empty & allowed_bb;
+  }
+
+  while (double_push) {
+    Square dst = pop_lsb(&double_push);
+    Square src = dst + (turn == WHITE ? -16 : 16);
+    *moves++ = new_move(src, dst, MOVE_DOUBLE_PUSH);
+  }
+
+  // Captures
+  Bitboard opponent_bb = all_bb & not_turn_bb & ~new_bitboard(opposing_king);
+  Bitboard unpinned_captures = not_pinned_pawns;
+  while (unpinned_captures) {
+    Square src = pop_lsb(&unpinned_captures);
+    Bitboard attacks = pawn_attacks[turn][src]
+      & opponent_bb
+      & capture_mask;
+    while (attacks) {
+      Square dst = pop_lsb(&attacks);
+      if (new_bitboard(dst) & bitboard_rank(promo_rank)) {
+        *moves++ = new_move(src, dst, MOVE_PROMO_N);
+        *moves++ = new_move(src, dst, MOVE_PROMO_B);
+        *moves++ = new_move(src, dst, MOVE_PROMO_R);
+        *moves++ = new_move(src, dst, MOVE_PROMO_Q);
+      } else {
+        *moves++ = new_move(src, dst, MOVE_NORMAL);
+      }
+    }
+  }
+
+  // En passant
+  if (board->ep_square != SQUARE_NONE) {
+    Bitboard ep_attackers = pawns & pawn_attacks[opposing][board->ep_square];
+    ep_attackers &= not_pinned_pawns;
+
+    Square ep_captured = turn == WHITE ?
+      board->ep_square - 8 : board->ep_square + 8;
+
+    while (ep_attackers) {
+      Square src = pop_lsb(&ep_attackers);
+
+      Bitboard occ_after = all_bb
+        ^ new_bitboard(src)
+        ^ new_bitboard(ep_captured)
+        ^ new_bitboard(board->ep_square);
+
+      Bitboard ep_check = rook_attacks(king, occ_after) & opposing_orthos;
+      if (ep_check) continue;
+
+      if (checkers_len == 1) {
+        bool captures_checker = new_bitboard(ep_captured) & checkers;
+        bool blocks_check = new_bitboard(board->ep_square) & push_mask;
+        if (!captures_checker && !blocks_check) continue;
+      }
+
+      *moves++ = new_move(src, board->ep_square, MOVE_EP);
+    }
+  }
+
+  // Pinned pawns
+  Bitboard pinned_pawns = pinned & pawns;
+  while (pinned_pawns) {
+    Square src = pop_lsb(&pinned_pawns);
+    Bitboard pin_ray = pin_rays[src];
+
+    // Push along pin ray
+    Bitboard push;
+    if (turn == WHITE)
+      push = new_bitboard(src + 8) & empty & pin_ray & allowed_bb;
+    else
+      push = new_bitboard(src - 8) & empty & pin_ray & allowed_bb;
+
+    while (push) {
+      Square dst = pop_lsb(&push);
+      if (new_bitboard(dst) & bitboard_rank(promo_rank)) {
+        *moves++ = new_move(src, dst, MOVE_PROMO_N);
+        *moves++ = new_move(src, dst, MOVE_PROMO_B);
+        *moves++ = new_move(src, dst, MOVE_PROMO_R);
+        *moves++ = new_move(src, dst, MOVE_PROMO_Q);
+      } else {
+        *moves++ = new_move(src, dst, MOVE_NORMAL);
+      }
+    }
+
+    // Double push along pin ray
+    Bitboard double_push_pin;
+    if (turn == WHITE) {
+      Bitboard one = new_bitboard(src + 8) & empty;
+      double_push_pin = (one & bitboard_rank(RANK_3)) ?
+        (new_bitboard(src + 16) & empty & pin_ray & allowed_bb) : 0;
+    } else {
+      Bitboard one = new_bitboard(src - 8) & empty;
+      double_push_pin = (one & bitboard_rank(RANK_6)) ?
+        (new_bitboard(src - 16) & empty & pin_ray & allowed_bb) : 0;
+    }
+
+    while (double_push_pin)
+      *moves++ = new_move(src, pop_lsb(&double_push_pin), MOVE_DOUBLE_PUSH);
+
+    // Captures along pin ray
+    Bitboard captures = pawn_attacks[turn][src]
+      & opponent_bb & pin_ray & capture_mask;
+
+    while (captures) {
+      Square dst = pop_lsb(&captures);
+      if (new_bitboard(dst) & bitboard_rank(promo_rank)) {
+        *moves++ = new_move(src, dst, MOVE_PROMO_N);
+        *moves++ = new_move(src, dst, MOVE_PROMO_B);
+        *moves++ = new_move(src, dst, MOVE_PROMO_R);
+        *moves++ = new_move(src, dst, MOVE_PROMO_Q);
+      } else {
+        *moves++ = new_move(src, dst, MOVE_NORMAL);
+      }
+    }
+
+    // En passant for pinned pawns
+    if (board->ep_square != SQUARE_NONE
+        && (new_bitboard(src) & pawn_attacks[opposing][board->ep_square])
+        && (new_bitboard(board->ep_square) & pin_ray)) {
+      Square ep_captured = turn == WHITE ?
+        board->ep_square - 8 : board->ep_square + 8;
+
+      Bitboard occ_after = all_bb
+        ^ new_bitboard(src)
+        ^ new_bitboard(ep_captured)
+        ^ new_bitboard(board->ep_square);
+
+      Bitboard ep_check = rook_attacks(king, occ_after) & opposing_orthos;
+      if (!ep_check)
+        *moves++ = new_move(src, board->ep_square, MOVE_EP);
+    }
   }
 
   return moves;
