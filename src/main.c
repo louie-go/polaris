@@ -11,7 +11,7 @@
 #include "parsing.h"
 #include "types.h"
 
-#define DEPTH 6
+#define DEPTH 7
 
 uint64_t perft(uint8_t depth, Board *board) {
   if (depth == 0) return 1;
@@ -44,7 +44,19 @@ int main(void) {
 
   print_board(board, stdout);
 
-  printf("nodes %" PRIu64 "\n", perft(DEPTH, board));
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC, &start);
+  uint64_t nodes = perft(DEPTH, board);
+  clock_gettime(CLOCK_MONOTONIC, &end);
+
+  double elapsed =
+    (end.tv_sec - start.tv_sec) +
+    (end.tv_nsec - start.tv_nsec) / 1e9;
+
+  double nps = nodes / elapsed;
+
+  printf("depth %d nodes %" PRIu64 " time %.2fs nps %.2f\n",
+    DEPTH, nodes, elapsed, nps);
 
   free(board);
   return 0;
