@@ -764,7 +764,8 @@ Move *legal_moves(const Board *board, Move *moves) {
   Bitboard pinned = 0, pin_rays[SQUARE_LEN];
 
   while (snipers) {
-    Bitboard ray = between[king][pop_lsb(&snipers)];
+    Square sniper_sq = pop_lsb(&snipers);
+    Bitboard ray = between[king][sniper_sq];
     Bitboard blockers = ray & all_bb;
 
     // skip if blockers does not contain only 1 bit
@@ -773,7 +774,8 @@ Move *legal_moves(const Board *board, Move *moves) {
     // skip if not a friendly piece
     if (!(blockers & turn_bb)) continue;
 
-    pin_rays[lsb(blockers)] = ray;
+    pin_rays[lsb(blockers)] = ray
+      | new_bitboard(sniper_sq);
     pinned |= blockers;
   }
 
