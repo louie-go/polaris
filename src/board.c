@@ -10,6 +10,8 @@
 #include "parsing.h"
 #include "types.h"
 
+const char STARTING_POSITION[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 static Zobrist board_hashes[PIECE_LEN][SQUARE_LEN];
 static Zobrist turn_hash;
 static Zobrist castle_hashes[CASTLE_LEN];

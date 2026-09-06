@@ -6,6 +6,12 @@
 #include "board.h"
 #include "types.h"
 
+const uint8_t MAX_FEN_BUFFER  = 93;
+const uint8_t MAX_MOVE_BUFFER = 6;
+
+const char piecetype_chars[PIECETYPE_LEN] = "pnbrqk";
+const char piece_chars[PIECE_LEN] = "PpNnBbRrQqKk";
+
 char *format_square(Square square, char *buffer) {
   if (square == SQUARE_NONE) {
     *buffer++ = '-';

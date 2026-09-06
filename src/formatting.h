@@ -5,8 +5,8 @@
 #include "board.h"
 #include "types.h"
 
-static const uint8_t MAX_FEN_BUFFER  = 93;
-static const uint8_t MAX_MOVE_BUFFER = 6;
+extern const uint8_t MAX_FEN_BUFFER;
+extern const uint8_t MAX_MOVE_BUFFER;
 
 static inline char format_color(Color color) {
   assert(color > COLOR_NONE && color < COLOR_LEN);
@@ -14,14 +14,14 @@ static inline char format_color(Color color) {
   return color == WHITE ? 'w' : 'b';
 }
 
-static const char piecetype_chars[PIECETYPE_LEN] = "pnbrqk";
+extern const char piecetype_chars[PIECETYPE_LEN];
 static inline char format_piecetype(PieceType piecetype) {
   assert(piecetype > PIECETYPE_NONE && piecetype < PIECETYPE_LEN);
 
   return piecetype_chars[piecetype];
 }
 
-static const char piece_chars[PIECE_LEN] = "PpNnBbRrQqKk";
+extern const char piece_chars[PIECE_LEN];
 static inline char format_piece(Piece piece) {
   assert(piece > PIECE_NONE && piece < PIECE_LEN);
 

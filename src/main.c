@@ -11,7 +11,7 @@
 #include "parsing.h"
 #include "types.h"
 
-#define DEPTH 7
+#define DEPTH 6
 
 uint64_t perft(uint8_t depth, Board *board) {
   if (depth == 0) return 1;

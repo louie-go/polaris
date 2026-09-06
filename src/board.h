@@ -33,7 +33,7 @@ typedef struct {
   Square       ep_square;
 } Board;
 
-static const char STARTING_POSITION[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+extern const char STARTING_POSITION[];
 
 static inline Bitboard pieces(const Board *board, Color color, PieceType type) {
   return board->color_bb[color] & board->type_bb[type];
