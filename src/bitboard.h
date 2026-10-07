@@ -33,7 +33,7 @@ static inline uint8_t popcount(Bitboard bitboard) {
 }
 
 static inline Square lsb(Bitboard bitboard) {
-  assert(bitboard != 0);
+  assert(bitboard);
 
 #ifdef __BMI__
   return _tzcnt_u64(bitboard);
