@@ -1,7 +1,3 @@
-#if defined(__BMI2__) && !defined(USE_MAGICS)
-#define USE_PEXT
-#endif
-
 #include "bitboard.h"
 #include "types.h"
 
@@ -10,7 +6,7 @@ extern const Bitboard knight_attacks[SQUARE_LEN];
 extern const Bitboard bishop_masks[SQUARE_LEN];
 extern const Bitboard rook_masks[SQUARE_LEN];
 
-#ifdef USE_PEXT
+#if defined(__BMI2__) && !defined(USE_MAGICS)
 extern const Bitboard bishop_pext_attacks[SQUARE_LEN][512];
 extern const Bitboard rook_pext_attacks[SQUARE_LEN][4096];
 #else
