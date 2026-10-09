@@ -5,59 +5,60 @@
 #include "board.h"
 #include "types.h"
 
-static inline Color parse_color(char color_char) {
+static inline color_t parse_color(char color_char) {
   assert(color_char == 'w' || color_char == 'b');
 
-  return color_char == 'w' ? WHITE : BLACK;
+  return color_char == 'w' ? COLOR_WHITE : COLOR_BLACK;
 }
 
-static inline PieceType parse_piecetype(char piecetype_char) {
+static inline piecetype_t parse_piecetype(char piecetype_char) {
   switch (piecetype_char) {
-    case 'p': return PAWN;
-    case 'n': return KNIGHT;
-    case 'b': return BISHOP;
-    case 'r': return ROOK;
-    case 'q': return QUEEN;
-    case 'k': return KING;
+    case 'p': return PIECETYPE_PAWN;
+    case 'n': return PIECETYPE_KNIGHT;
+    case 'b': return PIECETYPE_BISHOP;
+    case 'r': return PIECETYPE_ROOK;
+    case 'q': return PIECETYPE_QUEEN;
+    case 'k': return PIECETYPE_KING;
     default:
       assert(0);
       return PIECETYPE_NONE;
   }
 }
 
-static inline Piece parse_piece(char piece_char) {
+static inline piece_t parse_piece(char piece_char) {
   switch (piece_char) {
-    case 'P': return WHITE_PAWN;
-    case 'N': return WHITE_KNIGHT;
-    case 'B': return WHITE_BISHOP;
-    case 'R': return WHITE_ROOK;
-    case 'Q': return WHITE_QUEEN;
-    case 'K': return WHITE_KING;
-    case 'p': return BLACK_PAWN;
-    case 'n': return BLACK_KNIGHT;
-    case 'b': return BLACK_BISHOP;
-    case 'r': return BLACK_ROOK;
-    case 'q': return BLACK_QUEEN;
-    case 'k': return BLACK_KING;
+    case 'P': return PIECE_WP;
+    case 'N': return PIECE_WN;
+    case 'B': return PIECE_WB;
+    case 'R': return PIECE_WR;
+    case 'Q': return PIECE_WQ;
+    case 'K': return PIECE_WK;
+    case 'p': return PIECE_BP;
+    case 'n': return PIECE_BN;
+    case 'b': return PIECE_BB;
+    case 'r': return PIECE_BR;
+    case 'q': return PIECE_BQ;
+    case 'k': return PIECE_BK;
     default:
       assert(0);
       return PIECE_NONE;
   }
 }
 
-static inline File parse_file(char file_char) {
+static inline file_t parse_file(char file_char) {
   assert(file_char >= 'a' && file_char <= 'h');
 
   return file_char - 'a';
 }
 
-static inline Rank parse_rank(char rank_char) {
+static inline rank_t parse_rank(char rank_char) {
   assert(rank_char >= '1' && rank_char <= '8');
 
   return rank_char - '1';
 }
 
-Square parse_square(const char *square_str);
-CastleRights parse_rights(const char *rights_str);
-Move parse_move(const char *move_str);
-void parse_fen(const char *, Board *fen);
+square_t parse_square(const char *square_str);
+castle_rights_t parse_rights(const char *rights_str);
+// TODO: better move parsing (more compliant to `movetype_t`)
+move_t parse_move(const board_t *board, const char *move_str);
+void parse_fen(const char *fen, board_t *board);

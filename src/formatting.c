@@ -6,27 +6,26 @@
 #include "board.h"
 #include "types.h"
 
-const char piecetype_chars[PIECETYPE_LEN] = "pnbrqk";
-const char piece_chars[PIECE_LEN] = "PpNnBbRrQqKk";
+const char piecetype_chars[PIECETYPE_LENGTH] = "pnbrqk";
+const char piece_chars[PIECE_LENGTH] = "PpNnBbRrQqKk";
 
-char *format_square(Square square, char *buffer) {
+char *format_square(square_t square, char *buffer) {
   if (square == SQUARE_NONE) {
     *buffer++ = '-';
     *buffer = '\0';
     return buffer;
   }
 
-  assert(square > SQUARE_NONE && square < SQUARE_LEN);
+  assert(square > SQUARE_NONE && square < SQUARE_LENGTH);
 
   *buffer++ = format_file(square_file(square));
   *buffer++ = format_rank(square_rank(square));
   *buffer = '\0';
-
   return buffer;
 }
 
-char *format_rights(CastleRights rights, char *buffer) {
-  assert(rights <= CASTLE_ALL);
+char *format_rights(castle_rights_t rights, char *buffer) {
+  assert(rights <= CASTLE_MAX);
 
   if (rights == CASTLE_NONE) {
     *buffer++ = '-';
@@ -34,7 +33,7 @@ char *format_rights(CastleRights rights, char *buffer) {
     return buffer;
   }
 
-  for (CastleRights right = CASTLE_WK; right < 1<<CASTLE_LEN; right <<= 1)
+  for (castle_rights_t right = CASTLE_WK; right < 1<<CASTLE_LENGTH; right <<= 1)
     switch (right & rights) {
       case CASTLE_WK: *buffer++ = 'K'; break;
       case CASTLE_WQ: *buffer++ = 'Q'; break;
@@ -46,27 +45,27 @@ char *format_rights(CastleRights rights, char *buffer) {
   return buffer;
 }
 
-char *format_move(Move move, char *buffer) {
+char *format_move(move_t move, char *buffer) {
   buffer = format_square(move_src(move), buffer);
   buffer = format_square(move_dst(move), buffer);
 
-  MoveType type = move_type(move);
+  movetype_t type = move_type(move);
   if (is_promotion(type))
-    *buffer++ = format_piecetype(type-MOVE_PROMO_N + KNIGHT);
+    *buffer++ = format_piecetype(move_promo_piece(type));
 
   *buffer = '\0';
   return buffer;
 }
 
-char *format_fen(const Board *board, char *buffer) {
+char *format_fen(const board_t *board, char *buffer) {
   /************************
    *        BOARD         *
    ************************/
   char *start = buffer;
-  for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
-    for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Square square = new_square(file, rank);
-      Piece piece = board->pieces[square];
+  for (rank_t rank = RANK_LENGTH-1; rank > RANK_NONE; rank--) {
+    for (file_t file = FILE_NONE+1; file < FILE_LENGTH; file++) {
+      square_t square = new_square(file, rank);
+      piece_t piece = board->pieces[square];
 
       if (piece != PIECE_NONE) *buffer++ = format_piece(piece);
       else

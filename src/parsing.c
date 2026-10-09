@@ -1,23 +1,22 @@
 #include "parsing.h"
 
 #include <stdio.h>
+#include <string.h>
 
 #include "bitboard.h"
 #include "board.h"
 #include "types.h"
 
-Square parse_square(const char *square_str) {
+square_t parse_square(const char *square_str) {
   if (*square_str == '-') return SQUARE_NONE;
 
   return new_square(parse_file(*square_str), parse_rank(square_str[1]));
 }
 
-CastleRights parse_rights(const char *rights_str) {
+castle_rights_t parse_rights(const char *rights_str) {
   if (*rights_str == '-') return CASTLE_NONE;
 
-  CastleRights rights = 0;
-
-  for (;;rights_str++)
+  for (castle_rights_t rights = 0;;rights_str++)
     switch (*rights_str) {
       case 'K':
         rights |= CASTLE_WK;
@@ -35,58 +34,36 @@ CastleRights parse_rights(const char *rights_str) {
     }
 }
 
-// TODO: better move parsing (more compliant to `MoveType`)
-// * NOTE: would need `const Board *` as an argument
-Move parse_move(const char *move_str) {
-  Square src = parse_square(move_str);
-  Square dst = parse_square(move_str + 2);
-  Move move = new_move(src, dst, MOVE_NORMAL);
-
-  char promo_char = move_str[4];
-  if (promo_char != 'n'
-      && promo_char != 'b'
-      && promo_char != 'r'
-      && promo_char != 'q')
-    return move;
-
-  return set_move_type(parse_piecetype(promo_char)+MOVE_PROMO_N - KNIGHT, &move);
-}
-
-void parse_fen(const char *fen, Board *board) {
+void parse_fen(const char *fen, board_t *board) {
   /************************
    *        BOARD         *
    ************************/
-  Bitboard *all_bb = &board->color_bb[ALL];
+  memset(board->piece_bb, 0, sizeof(board->piece_bb));
+  memset(board->color_bb, 0, sizeof(board->color_bb));
+  memset(board->pieces, PIECE_NONE, sizeof(board->pieces));
 
-  *all_bb = 0;
-  for (Color color = COLOR_NONE+1; color < COLOR_LEN; color++)
-    board->color_bb[color] = 0;
-  for (PieceType type = PIECETYPE_NONE+1; type < PIECETYPE_LEN; type++)
-    board->type_bb[type] = 0;
-
-  File file = FILE_NONE+1; Rank rank = RANK_LEN-1;
+  file_t file = FILE_NONE+1; rank_t rank = RANK_LENGTH-1;
   for (; *fen != ' '; fen++, file++) {
     char fen_char = *fen;
-    Square square = new_square(file, rank);
-
     if (fen_char >= '1' && fen_char <= '8') {
-      for (Square empty = square; empty < square+(fen_char-'0'); empty++)
-        board->pieces[empty] = PIECE_NONE;
       file += fen_char-'1';
     } else if (fen_char == '/') {
       file = FILE_NONE; rank--;
     } else {
-      Piece piece = parse_piece(fen_char);
-      Bitboard sq_bb = new_bitboard(square);
+      square_t square = new_square(file, rank);
+      bitboard_t sq_bb = new_bitboard(square);
 
-      *all_bb |= sq_bb;
-      board->color_bb[piece_color(piece)] |= sq_bb;
-      board->type_bb[piece_type(piece)] |= sq_bb;
+      piece_t piece = parse_piece(fen_char);
+      color_t color = piece_color(piece);
+
+      board->piece_bb[color][piece_type(piece)] |= sq_bb;
+      board->color_bb[color] |= sq_bb;
+      board->color_bb[COLOR_ALL] |= sq_bb;
       board->pieces[square] = piece;
     }
   }
 
-  assert(file == FILE_LEN);
+  assert(file == FILE_LENGTH);
   assert(rank == RANK_NONE+1);
 
   /************************

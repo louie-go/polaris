@@ -10,21 +10,21 @@
 
 #include "types.h"
 
-typedef uint64_t Bitboard;
+typedef uint64_t bitboard_t;
 
-static inline Bitboard new_bitboard(Square square) {
+static inline bitboard_t new_bitboard(square_t square) {
   return 1ULL << square;
 }
 
-static inline Bitboard bitboard_file(File file) {
+static inline bitboard_t bitboard_file(file_t file) {
   return 0x101010101010101ULL << file;
 }
 
-static inline Bitboard bitboard_rank(Rank rank) {
-  return 0xFFULL << rank*RANK_LEN;
+static inline bitboard_t bitboard_rank(rank_t rank) {
+  return 0xFFULL << rank*RANK_LENGTH;
 }
 
-static inline uint8_t popcount(Bitboard bitboard) {
+static inline uint8_t popcount(bitboard_t bitboard) {
 #ifdef __POPCNT__
   return _mm_popcnt_u64(bitboard);
 #else
@@ -32,7 +32,7 @@ static inline uint8_t popcount(Bitboard bitboard) {
 #endif
 }
 
-static inline Square lsb(Bitboard bitboard) {
+static inline square_t lsb(bitboard_t bitboard) {
   assert(bitboard);
 
 #ifdef __BMI__
@@ -42,7 +42,7 @@ static inline Square lsb(Bitboard bitboard) {
 #endif
 }
 
-static inline Bitboard clear_lsb(Bitboard bitboard) {
+static inline bitboard_t clear_lsb(bitboard_t bitboard) {
 #ifdef __BMI__
   return _blsr_u64(bitboard);
 #else
@@ -50,10 +50,10 @@ static inline Bitboard clear_lsb(Bitboard bitboard) {
 #endif
 }
 
-static inline Square pop_lsb(Bitboard *bitboard) {
-  Square square = lsb(*bitboard);
+static inline square_t pop_lsb(bitboard_t *bitboard) {
+  square_t square = lsb(*bitboard);
   *bitboard = clear_lsb(*bitboard);
   return square;
 }
 
-void print_bitboard(Bitboard bitboard, FILE *stream);
+void print_bitboard(bitboard_t bitboard, FILE *stream);

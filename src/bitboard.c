@@ -1,17 +1,17 @@
 #include "bitboard.h"
 
+#include <inttypes.h>
 #include <stdio.h>
 
 #include "formatting.h"
-#include "inttypes.h"
 #include "types.h"
 
-void print_bitboard(Bitboard bitboard, FILE *stream) {
-  for (Rank rank = RANK_LEN-1; rank > RANK_NONE; rank--) {
+void print_bitboard(bitboard_t bitboard, FILE *stream) {
+  for (rank_t rank = RANK_LENGTH-1; rank > RANK_NONE; rank--) {
     fputc(format_rank(rank), stream);
     fputc(' ', stream);
-    for (File file = FILE_NONE+1; file < FILE_LEN; file++) {
-      Bitboard sq_bb = new_bitboard(new_square(file, rank));
+    for (file_t file = FILE_NONE+1; file < FILE_LENGTH; file++) {
+      bitboard_t sq_bb = new_bitboard(new_square(file, rank));
       if (sq_bb & bitboard) fputc('*', stream);
       else fputc('.', stream);
       fputc(' ', stream);
