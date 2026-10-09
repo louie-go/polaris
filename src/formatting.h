@@ -5,8 +5,8 @@
 #include "board.h"
 #include "types.h"
 
-extern const uint8_t MAX_FEN_BUFFER;
-extern const uint8_t MAX_MOVE_BUFFER;
+#define MAX_FEN_BUFFER  93
+#define MAX_MOVE_BUFFER 6
 
 static inline char format_color(Color color) {
   assert(color > COLOR_NONE && color < COLOR_LEN);
