@@ -47,7 +47,7 @@ static const PerftTest perft_tests[PERFT_TESTS_LEN] = {
 };
 
 uint64_t perft(uint8_t depth, Board *board) {
-  if (depth == 0) return 1;
+  if (!depth) return 1;
   uint64_t nodes = 0;
 
   Move moves[MAX_MOVES];
